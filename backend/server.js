@@ -10,6 +10,12 @@ const port = process.env.PORT || 3000;
 // Middleware for parsing JSON
 app.use(express.json());
 app.use(cors());
+
+// Serve enhanced index as default - must come before static middleware
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index-enhanced.html'));
+});
+
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
 
@@ -1148,11 +1154,6 @@ app.get('/api/analytics/enhanced', (req, res) => {
         console.error('Error generating enhanced analytics:', error);
         res.status(500).json({ error: 'Failed to generate analytics' });
     }
-});
-
-// Serve enhanced index as default
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index-enhanced.html'));
 });
 
 // Initialize jsreport
