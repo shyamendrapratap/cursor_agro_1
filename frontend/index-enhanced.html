@@ -262,7 +262,7 @@
     </nav>
 
     <!-- Hero Banner Section -->
-    <section class="relative h-[70vh] flex items-center justify-center overflow-hidden">
+    <section id="hero-banner" class="relative h-[70vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0">
             <img src="images/banner.jpg" alt="Cow grazing in green field" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/30"></div>
@@ -287,7 +287,7 @@
     </section>
 
     <!-- Features Section -->
-    <section class="py-16 bg-white">
+    <section id="features-section" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center animate-in">
@@ -338,7 +338,7 @@
     </section>
 
     <!-- Farm Showcase Section -->
-    <section id="farm" class="py-16 bg-white">
+    <section id="farm-showcase" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Farm & Facilities</h2>
@@ -412,7 +412,7 @@
     </section>
 
     <!-- Customer Testimonials Section -->
-    <section class="py-16 bg-gray-50">
+    <section id="testimonials-section" class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
@@ -471,7 +471,7 @@
     </section>
 
     <!-- Newsletter Subscription Section -->
-    <section class="py-16 bg-blue-600">
+    <section id="newsletter-section" class="py-16 bg-blue-600">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold text-white mb-4">Stay Updated</h2>
             <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -491,7 +491,7 @@
     </section>
 
     <!-- Map Section -->
-    <section id="contact" class="py-16 bg-gray-50">
+    <section id="map-section" class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">Visit Our Farm</h2>
@@ -706,6 +706,8 @@
                     'hero-banner',
                     'features-section', 
                     'farm-showcase',
+                    'testimonials-section',
+                    'newsletter-section',
                     'map-section'
                 ];
                 
@@ -725,9 +727,11 @@
                 // Update page title and add customer welcome
                 document.title = 'Order Dairy Products - Vibha Agro Dairy';
                 
-                // Add customer welcome section
+                // Add customer welcome section (only if it doesn't already exist)
                 const productsSection = document.getElementById('products');
-                if (productsSection) {
+                const existingWelcome = document.querySelector('.text-center.mb-8.bg-blue-50');
+                
+                if (productsSection && !existingWelcome) {
                     const welcomeDiv = document.createElement('div');
                     welcomeDiv.className = 'text-center mb-8 bg-blue-50 p-6 rounded-lg';
                     welcomeDiv.innerHTML = `
@@ -750,6 +754,38 @@
                     `;
                     productsSection.insertBefore(welcomeDiv, productsSection.firstChild);
                 }
+            } else {
+                // User is not logged in or not a customer - ensure original interface is shown
+                const sectionsToShow = [
+                    'hero-banner',
+                    'features-section', 
+                    'farm-showcase',
+                    'testimonials-section',
+                    'newsletter-section',
+                    'map-section'
+                ];
+                
+                sectionsToShow.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'block';
+                    }
+                });
+                
+                // Show navbar links
+                const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
+                navbarLinks.forEach(link => {
+                    link.style.display = 'inline-block';
+                });
+                
+                // Remove customer welcome section if it exists
+                const welcomeSection = document.querySelector('.text-center.mb-8.bg-blue-50');
+                if (welcomeSection && welcomeSection.querySelector('h1') && welcomeSection.querySelector('h1').textContent.includes('Welcome back')) {
+                    welcomeSection.remove();
+                }
+                
+                // Restore original page title
+                document.title = 'Vibha Agro Dairy - Fresh Dairy Products';
             }
         }
 
@@ -925,6 +961,39 @@
         function logout() {
             localStorage.removeItem('user');
             cart = []; // Clear cart on logout
+            
+            // Restore original interface for logged-out users
+            const sectionsToShow = [
+                'hero-banner',
+                'features-section', 
+                'farm-showcase',
+                'testimonials-section',
+                'newsletter-section',
+                'map-section'
+            ];
+            
+            sectionsToShow.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.style.display = 'block';
+                }
+            });
+            
+            // Show navbar links again
+            const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
+            navbarLinks.forEach(link => {
+                link.style.display = 'inline-block';
+            });
+            
+            // Remove customer welcome section if it exists
+            const welcomeSection = document.querySelector('.text-center.mb-8.bg-blue-50');
+            if (welcomeSection && welcomeSection.querySelector('h1') && welcomeSection.querySelector('h1').textContent.includes('Welcome back')) {
+                welcomeSection.remove();
+            }
+            
+            // Restore original page title
+            document.title = 'Vibha Agro Dairy - Fresh Dairy Products';
+            
             checkAuth(); // This will refresh the products and hide cart functionality
         }
 

@@ -93,5 +93,24 @@
     "status": "completed",
     "createdAt": "2025-06-21T17:03:14.403Z",
     "updatedAt": "2025-06-21T18:30:37.151Z"
+  },
+  {
+    "id": 6,
+    "customerName": "customer1",
+    "customerId": 2,
+    "items": [
+      {
+        "id": 2,
+        "name": "Curd",
+        "price": 6.99,
+        "description": "Thick and creamy traditional curd.",
+        "image": "/images/check.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 6.99,
+    "status": "completed",
+    "createdAt": "2025-06-21T19:36:03.618Z",
+    "updatedAt": "2025-06-21T19:37:24.273Z"
   }
 ]
