@@ -248,9 +248,7 @@ This project is licensed under the MIT License.
 ## 📞 Support
 
 For support and questions:
-- **Proprietor**: Shanvi Singh
-- **Phone**: +91 9246871484
-- **Location**: 25°46'43.3"N 85°15'27.0"E
+- *****
 
 ---
 
