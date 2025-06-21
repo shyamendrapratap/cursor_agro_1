@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const cors = require('cors');
-const jsreport = require('jsreport-core')();
+const jsreport = require('jsreport-core')().use(require('jsreport-chrome-pdf')()).use(require('jsreport-jsrender')());
 const backupSystem = require('./backup');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,6 +26,8 @@ const ORDERS_FILE = path.join(dataDir, 'orders.json');
 const USERS_FILE = path.join(dataDir, 'users.json');
 const INVESTMENTS_FILE = path.join(dataDir, 'investments.json');
 const EXPENSES_FILE = path.join(dataDir, 'expenses.json');
+const MONTHLY_BILLS_FILE = path.join(dataDir, 'monthly_bills.json');
+const PAYMENTS_FILE = path.join(dataDir, 'payments.json');
 
 // Ensure data directory exists
 if (!fs.existsSync(dataDir)) {
@@ -99,6 +101,22 @@ function loadInitialData() {
         expenses = [];
         saveExpenses();
     }
+
+    // Load or create monthly bills data
+    if (fs.existsSync(MONTHLY_BILLS_FILE)) {
+        monthlyBills = JSON.parse(fs.readFileSync(MONTHLY_BILLS_FILE, 'utf8'));
+    } else {
+        monthlyBills = [];
+        saveMonthlyBills();
+    }
+
+    // Load or create payments data
+    if (fs.existsSync(PAYMENTS_FILE)) {
+        payments = JSON.parse(fs.readFileSync(PAYMENTS_FILE, 'utf8'));
+    } else {
+        payments = [];
+        savePayments();
+    }
 }
 
 // Save data to files
@@ -122,12 +140,22 @@ function saveExpenses() {
     fs.writeFileSync(EXPENSES_FILE, JSON.stringify(expenses, null, 2));
 }
 
+function saveMonthlyBills() {
+    fs.writeFileSync(MONTHLY_BILLS_FILE, JSON.stringify(monthlyBills, null, 2));
+}
+
+function savePayments() {
+    fs.writeFileSync(PAYMENTS_FILE, JSON.stringify(payments, null, 2));
+}
+
 // Initialize data
 let users = [];
 let inventory = [];
 let orders = [];
 let investments = [];
 let expenses = [];
+let monthlyBills = [];
+let payments = [];
 
 // Load data on startup
 loadInitialData();
@@ -575,6 +603,23 @@ app.get("/api/bills/:orderId/pdf", async (req, res) => {
     };
     
     try {
+        // Pre-process the data
+        const processedBill = {
+            ...bill,
+            formattedDate: new Date(bill.createdAt).toLocaleDateString('en-IN'),
+            formattedDueDate: new Date(bill.billDate).toLocaleDateString('en-IN'),
+            formattedTotalAmount: parseFloat(bill.total).toFixed(2),
+            formattedDueAmount: parseFloat(bill.total - bill.subtotal).toFixed(2),
+            formattedPaidAmount: parseFloat(bill.subtotal).toFixed(2),
+            overdueDays: 0,
+            overdueFee: '0.00', // 2% monthly fee
+            orders: bill.items.map(item => ({
+                ...item,
+                formattedDate: new Date(item.date).toLocaleDateString('en-IN'),
+                formattedAmount: parseFloat(item.price).toFixed(2)
+            }))
+        };
+
         const result = await jsreport.render({
             template: {
                 content: `
@@ -602,22 +647,22 @@ app.get("/api/bills/:orderId/pdf", async (req, res) => {
                     <div class="header">
                         <div class="logo">🥛 Vibha Agro Dairy</div>
                         <h1>INVOICE</h1>
-                        <p>{{companyInfo.address}}</p>
-                        <p>Phone: {{companyInfo.phone}} | Email: {{companyInfo.email}}</p>
-                        <p>GSTIN: {{companyInfo.gstin}}</p>
+                        <p>{{:companyInfo.address}}</p>
+                        <p>Phone: {{:companyInfo.phone}} | Email: {{:companyInfo.email}}</p>
+                        <p>GSTIN: {{:companyInfo.gstin}}</p>
                     </div>
                     
                     <div class="details">
                         <div>
                             <h3>Bill To:</h3>
-                            <p><strong>{{customerName}}</strong></p>
-                            <p>Customer ID: {{customerId}}</p>
+                            <p><strong>{{:customerName}}</strong></p>
+                            <p>Customer ID: {{:customerId}}</p>
                         </div>
                         <div style="text-align: right;">
                             <h3>Invoice Details:</h3>
-                            <p><strong>Invoice #:</strong> {{billId}}</p>
-                            <p><strong>Date:</strong> {{formatDate billDate}}</p>
-                            <p><strong>Status:</strong> {{status}}</p>
+                            <p><strong>Invoice #:</strong> {{:billId}}</p>
+                            <p><strong>Date:</strong> {{:formattedDate}}</p>
+                            <p><strong>Status:</strong> {{:status}}</p>
                         </div>
                     </div>
                     
@@ -631,26 +676,26 @@ app.get("/api/bills/:orderId/pdf", async (req, res) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {{#each items}}
+                            {{for items}}
                             <tr>
-                                <td>{{name}}</td>
-                                <td>{{quantity}}</td>
-                                <td>{{formatPrice price}}</td>
-                                <td>{{formatPrice (multiply price quantity)}}</td>
+                                <td>{{:name}}</td>
+                                <td>{{:quantity}}</td>
+                                <td>{{:formattedAmount}}</td>
+                                <td>{{:formattedAmount}}</td>
                             </tr>
-                            {{/each}}
+                            {{/for}}
                         </tbody>
                     </table>
                     
                     <div class="total">
-                        <div>Subtotal: ₹{{formatPrice subtotal}}</div>
-                        <div>Tax (5%): ₹{{formatPrice tax}}</div>
-                        <div style="font-size: 20px; color: #4CAF50;">Total: ₹{{formatPrice total}}</div>
+                        <div>Subtotal: ₹{{:formattedSubtotal}}</div>
+                        <div>Tax (5%): ₹{{:formattedTax}}</div>
+                        <div style="font-size: 20px; color: #4CAF50;">Total: ₹{{:formattedTotalAmount}}</div>
                     </div>
                     
                     <div class="footer">
                         <p><strong>Thank you for your business!</strong></p>
-                        <p>For any queries, please contact us at {{companyInfo.phone}}</p>
+                        <p>For any queries, please contact us at {{:companyInfo.phone}}</p>
                         <p>This is a computer generated invoice</p>
                     </div>
                 </body>
@@ -663,21 +708,25 @@ app.get("/api/bills/:orderId/pdf", async (req, res) => {
                     margin: '1cm'
                 }
             },
-            data: {
-                ...bill,
-                formatDate: (date) => new Date(date).toLocaleDateString('en-IN'),
-                formatPrice: (price) => parseFloat(price).toFixed(2),
-                multiply: (a, b) => a * b
-            }
+            data: processedBill
         });
         
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename="${bill.billId}.pdf"`);
-        res.send(result.content);
+        res.end(result.content);
         
     } catch (error) {
         console.error('PDF generation error:', error);
-        res.status(500).json({ error: 'Failed to generate PDF' });
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            orderId: orderId,
+            bill: bill
+        });
+        res.status(500).json({ 
+            error: 'Failed to generate PDF',
+            details: error.message 
+        });
     }
 });
 
@@ -1153,6 +1202,483 @@ app.get('/api/analytics/enhanced', (req, res) => {
     } catch (error) {
         console.error('Error generating enhanced analytics:', error);
         res.status(500).json({ error: 'Failed to generate analytics' });
+    }
+});
+
+// Monthly Billing System
+app.post('/api/monthly-bills/generate', (req, res) => {
+    try {
+        const { month, year, customerId } = req.body;
+        
+        if (!month || !year) {
+            return res.status(400).json({ error: 'Month and year are required' });
+        }
+        
+        const targetMonth = parseInt(month);
+        const targetYear = parseInt(year);
+        
+        // Get all orders for the specified month and year
+        let monthlyOrders = orders.filter(order => {
+            const orderDate = new Date(order.createdAt);
+            return orderDate.getMonth() === targetMonth - 1 && 
+                   orderDate.getFullYear() === targetYear;
+        });
+        
+        // Filter by customer if specified
+        if (customerId) {
+            monthlyOrders = monthlyOrders.filter(order => order.customerId === parseInt(customerId));
+        }
+        
+        if (monthlyOrders.length === 0) {
+            return res.status(404).json({ error: 'No orders found for the specified month' });
+        }
+        
+        // Group orders by customer
+        const customerBills = {};
+        monthlyOrders.forEach(order => {
+            if (!customerBills[order.customerId]) {
+                customerBills[order.customerId] = {
+                    customerId: order.customerId,
+                    customerName: order.customerName,
+                    orders: [],
+                    totalAmount: 0,
+                    month: targetMonth,
+                    year: targetYear
+                };
+            }
+            customerBills[order.customerId].orders.push(order);
+            customerBills[order.customerId].totalAmount += order.total;
+        });
+        
+        // Generate monthly bills
+        const generatedBills = [];
+        const errors = [];
+        
+        Object.values(customerBills).forEach(customerBill => {
+            const billId = `MB-${targetYear}${targetMonth.toString().padStart(2, '0')}-${customerBill.customerId}`;
+            
+            // Check if bill already exists
+            const existingBill = monthlyBills.find(bill => 
+                bill.billId === billId
+            );
+            
+            if (existingBill) {
+                errors.push(`Monthly bill for ${customerBill.customerName} already exists for ${targetMonth}/${targetYear}`);
+                return;
+            }
+            
+            const monthlyBill = {
+                billId,
+                customerId: customerBill.customerId,
+                customerName: customerBill.customerName,
+                month: targetMonth,
+                year: targetYear,
+                totalAmount: customerBill.totalAmount,
+                dueAmount: customerBill.totalAmount, // Initially due amount equals total
+                orderCount: customerBill.orders.length,
+                orders: customerBill.orders.map(order => ({
+                    orderId: order.id,
+                    date: order.createdAt,
+                    amount: order.total
+                })),
+                status: 'pending', // pending, paid, overdue
+                dueDate: new Date(targetYear, targetMonth, 15).toISOString(), // Due on 15th of next month
+                createdAt: new Date().toISOString(),
+                paidAt: null,
+                paymentHistory: []
+            };
+            
+            monthlyBills.push(monthlyBill);
+            generatedBills.push(monthlyBill);
+        });
+        
+        // If there are errors, return them
+        if (errors.length > 0) {
+            return res.status(400).json({ 
+                error: 'Some bills could not be generated',
+                details: errors,
+                generatedBills: generatedBills
+            });
+        }
+        
+        saveMonthlyBills();
+        
+        res.json({ 
+            message: 'Monthly bills generated successfully',
+            bills: generatedBills,
+            totalBills: generatedBills.length
+        });
+    } catch (error) {
+        console.error('Error generating monthly bills:', error);
+        res.status(500).json({ error: 'Failed to generate monthly bills' });
+    }
+});
+
+app.get('/api/monthly-bills', (req, res) => {
+    try {
+        const { customerId, status, month, year } = req.query;
+        
+        let filteredBills = [...monthlyBills];
+        
+        // Filter by customer
+        if (customerId) {
+            filteredBills = filteredBills.filter(bill => bill.customerId === parseInt(customerId));
+        }
+        
+        // Filter by status
+        if (status) {
+            filteredBills = filteredBills.filter(bill => bill.status === status);
+        }
+        
+        // Filter by month and year
+        if (month && year) {
+            filteredBills = filteredBills.filter(bill => 
+                bill.month === parseInt(month) && bill.year === parseInt(year)
+            );
+        }
+        
+        // Sort by creation date (newest first)
+        filteredBills.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        res.json(filteredBills);
+    } catch (error) {
+        console.error('Error fetching monthly bills:', error);
+        res.status(500).json({ error: 'Failed to fetch monthly bills' });
+    }
+});
+
+app.get('/api/monthly-bills/:billId', (req, res) => {
+    try {
+        const { billId } = req.params;
+        const bill = monthlyBills.find(b => b.billId === billId);
+        
+        if (!bill) {
+            return res.status(404).json({ error: 'Monthly bill not found' });
+        }
+        
+        res.json(bill);
+    } catch (error) {
+        console.error('Error fetching monthly bill:', error);
+        res.status(500).json({ error: 'Failed to fetch monthly bill' });
+    }
+});
+
+app.post('/api/monthly-bills/:billId/pay', (req, res) => {
+    try {
+        const { billId } = req.params;
+        const { amount, paymentMethod, notes } = req.body;
+        
+        const bill = monthlyBills.find(b => b.billId === billId);
+        if (!bill) {
+            return res.status(404).json({ error: 'Monthly bill not found' });
+        }
+        
+        if (bill.status === 'paid') {
+            return res.status(400).json({ error: 'Bill is already paid' });
+        }
+        
+        const paymentAmount = parseFloat(amount) || bill.dueAmount;
+        
+        // Create payment record
+        const payment = {
+            id: Date.now(),
+            billId,
+            customerId: bill.customerId,
+            customerName: bill.customerName,
+            amount: paymentAmount,
+            paymentMethod: paymentMethod || 'cash',
+            notes: notes || '',
+            paidAt: new Date().toISOString(),
+            month: bill.month,
+            year: bill.year
+        };
+        
+        payments.push(payment);
+        savePayments();
+        
+        // Update bill
+        bill.dueAmount -= paymentAmount;
+        bill.paymentHistory.push({
+            paymentId: payment.id,
+            amount: paymentAmount,
+            paidAt: payment.paidAt,
+            paymentMethod: payment.paymentMethod
+        });
+        
+        if (bill.dueAmount <= 0) {
+            bill.status = 'paid';
+            bill.paidAt = new Date().toISOString();
+            bill.dueAmount = 0;
+        }
+        
+        saveMonthlyBills();
+        
+        res.json({ 
+            message: 'Payment recorded successfully',
+            payment,
+            updatedBill: bill
+        });
+    } catch (error) {
+        console.error('Error recording payment:', error);
+        res.status(500).json({ error: 'Failed to record payment' });
+    }
+});
+
+app.get('/api/monthly-bills/:billId/pdf', async (req, res) => {
+    const { billId } = req.params;
+    let bill;
+    
+    try {
+        bill = monthlyBills.find(b => b.billId === billId);
+        
+        if (!bill) {
+            return res.status(404).json({ error: 'Monthly bill not found' });
+        }
+        
+        // Calculate overdue days
+        const dueDate = new Date(bill.dueDate);
+        const today = new Date();
+        const overdueDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
+        
+        // Pre-process the data
+        const processedBill = {
+            ...bill,
+            formattedDate: new Date(bill.createdAt).toLocaleDateString('en-IN'),
+            formattedDueDate: dueDate.toLocaleDateString('en-IN'),
+            formattedTotalAmount: parseFloat(bill.totalAmount).toFixed(2),
+            formattedDueAmount: parseFloat(bill.dueAmount).toFixed(2),
+            formattedPaidAmount: parseFloat(bill.totalAmount - bill.dueAmount).toFixed(2),
+            overdueDays,
+            overdueFee: overdueDays > 0 ? parseFloat(bill.dueAmount * 0.02).toFixed(2) : '0.00', // 2% monthly fee
+            orders: bill.orders.map(order => ({
+                ...order,
+                formattedDate: new Date(order.date).toLocaleDateString('en-IN'),
+                formattedAmount: parseFloat(order.amount).toFixed(2)
+            }))
+        };
+
+        const result = await jsreport.render({
+            template: {
+                content: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+                        .header { text-align: center; border-bottom: 2px solid #4CAF50; padding-bottom: 20px; margin-bottom: 30px; }
+                        .header h1 { color: #4CAF50; margin: 0; font-size: 28px; }
+                        .header p { margin: 5px 0; color: #666; }
+                        .details { display: flex; justify-content: space-between; margin-bottom: 30px; }
+                        .details div { flex: 1; }
+                        .details h3 { color: #4CAF50; margin-bottom: 10px; }
+                        .details p { margin: 5px 0; }
+                        .summary { background: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 30px; }
+                        .summary h3 { color: #4CAF50; margin-top: 0; }
+                        .summary-row { display: flex; justify-content: space-between; margin: 10px 0; }
+                        .summary-row.total { border-top: 2px solid #4CAF50; padding-top: 10px; font-weight: bold; font-size: 18px; }
+                        .summary-row.overdue { color: #f44336; font-weight: bold; }
+                        .orders { margin-bottom: 30px; }
+                        .orders h3 { color: #4CAF50; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #4CAF50; color: white; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
+                        .status { padding: 5px 10px; border-radius: 3px; color: white; font-weight: bold; }
+                        .status.pending { background-color: #ff9800; }
+                        .status.paid { background-color: #4CAF50; }
+                        .status.overdue { background-color: #f44336; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>MONTHLY BILL</h1>
+                        <p>Vibha Agro Dairy Farm</p>
+                        <p>Bill ID: {{:billId}}</p>
+                        <p>Generated: {{:formattedDate}}</p>
+                    </div>
+                    
+                    <div class="details">
+                        <div>
+                            <h3>Customer Details</h3>
+                            <p><strong>Name:</strong> {{:customerName}}</p>
+                            <p><strong>Customer ID:</strong> {{:customerId}}</p>
+                        </div>
+                        <div>
+                            <h3>Bill Period</h3>
+                            <p><strong>Month:</strong> {{:month}}/{{:year}}</p>
+                            <p><strong>Due Date:</strong> {{:formattedDueDate}}</p>
+                            <p><strong>Status:</strong> <span class="status {{:status}}">{{:status}}</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary">
+                        <h3>Bill Summary</h3>
+                        <div class="summary-row">
+                            <span>Total Orders:</span>
+                            <span>{{:orderCount}}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Total Amount:</span>
+                            <span>₹{{:formattedTotalAmount}}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Amount Paid:</span>
+                            <span>₹{{:formattedPaidAmount}}</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Amount Due:</span>
+                            <span>₹{{:formattedDueAmount}}</span>
+                        </div>
+                        {{if overdueDays > 0}}
+                        <div class="summary-row overdue">
+                            <span>Overdue Days:</span>
+                            <span>{{:overdueDays}} days</span>
+                        </div>
+                        <div class="summary-row overdue">
+                            <span>Late Fee (2%):</span>
+                            <span>₹{{:overdueFee}}</span>
+                        </div>
+                        {{/if}}
+                    </div>
+                    
+                    <div class="orders">
+                        <h3>Order Details</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Amount (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{for orders}}
+                                <tr>
+                                    <td>{{:orderId}}</td>
+                                    <td>{{:formattedDate}}</td>
+                                    <td>{{:formattedAmount}}</td>
+                                </tr>
+                                {{/for}}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="footer">
+                        <p><strong>Payment Instructions:</strong></p>
+                        <p>• Please pay the due amount by the due date to avoid late fees</p>
+                        <p>• Late payments are subject to a 2% monthly fee</p>
+                        <p>• For any queries, please contact our customer service</p>
+                        <p><strong>Thank you for your business!</strong></p>
+                    </div>
+                </body>
+                </html>
+                `,
+                engine: 'jsrender',
+                recipe: 'chrome-pdf',
+                chrome: {
+                    format: 'A4',
+                    margin: '1in'
+                }
+            },
+            data: processedBill
+        });
+        
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="MONTHLY-BILL-${bill.billId}.pdf"`);
+        res.end(result.content);
+        
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            billId: req.params.billId,
+            bill: bill
+        });
+        res.status(500).json({ 
+            error: 'Failed to generate PDF',
+            details: error.message 
+        });
+    }
+});
+
+app.get('/api/payments', (req, res) => {
+    try {
+        const { customerId, billId, month, year } = req.query;
+        
+        let filteredPayments = [...payments];
+        
+        // Filter by customer
+        if (customerId) {
+            filteredPayments = filteredPayments.filter(payment => payment.customerId === parseInt(customerId));
+        }
+        
+        // Filter by bill
+        if (billId) {
+            filteredPayments = filteredPayments.filter(payment => payment.billId === billId);
+        }
+        
+        // Filter by month and year
+        if (month && year) {
+            filteredPayments = filteredPayments.filter(payment => 
+                payment.month === parseInt(month) && payment.year === parseInt(year)
+            );
+        }
+        
+        // Sort by payment date (newest first)
+        filteredPayments.sort((a, b) => new Date(b.paidAt) - new Date(a.paidAt));
+        
+        res.json(filteredPayments);
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+        res.status(500).json({ error: 'Failed to fetch payments' });
+    }
+});
+
+app.get('/api/dues/summary', (req, res) => {
+    try {
+        const { customerId } = req.query;
+        
+        let filteredBills = [...monthlyBills];
+        
+        // Filter by customer if specified
+        if (customerId) {
+            filteredBills = filteredBills.filter(bill => bill.customerId === parseInt(customerId));
+        }
+        
+        // Calculate summary
+        const summary = {
+            totalBills: filteredBills.length,
+            totalAmount: filteredBills.reduce((sum, bill) => sum + bill.totalAmount, 0),
+            totalDue: filteredBills.reduce((sum, bill) => sum + bill.dueAmount, 0),
+            totalPaid: filteredBills.reduce((sum, bill) => sum + (bill.totalAmount - bill.dueAmount), 0),
+            pendingBills: filteredBills.filter(bill => bill.status === 'pending').length,
+            overdueBills: filteredBills.filter(bill => {
+                const dueDate = new Date(bill.dueDate);
+                const today = new Date();
+                return bill.status !== 'paid' && dueDate < today;
+            }).length,
+            paidBills: filteredBills.filter(bill => bill.status === 'paid').length
+        };
+        
+        // Calculate overdue fees
+        const overdueBills = filteredBills.filter(bill => {
+            const dueDate = new Date(bill.dueDate);
+            const today = new Date();
+            return bill.status !== 'paid' && dueDate < today;
+        });
+        
+        summary.totalOverdueFees = overdueBills.reduce((sum, bill) => {
+            const dueDate = new Date(bill.dueDate);
+            const today = new Date();
+            const overdueDays = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
+            return sum + (bill.dueAmount * 0.02 * Math.ceil(overdueDays / 30)); // 2% monthly fee
+        }, 0);
+        
+        res.json(summary);
+    } catch (error) {
+        console.error('Error generating dues summary:', error);
+        res.status(500).json({ error: 'Failed to generate dues summary' });
     }
 });
 
