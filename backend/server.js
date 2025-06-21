@@ -1150,6 +1150,11 @@ app.get('/api/analytics/enhanced', (req, res) => {
     }
 });
 
+// Serve enhanced index as default
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index-enhanced.html'));
+});
+
 // Initialize jsreport
 jsreport.init().then(() => {
     console.log('jsreport initialized');
