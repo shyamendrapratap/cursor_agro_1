@@ -17,7 +17,7 @@
         <header class="hero">
             <h1>The Freshest Dairy, Delivered.</h1>
             <p>Experience the taste of quality with our range of dairy products.</p>
-:q        </header>
+        </header>
         <h2 class="section-title">Our Products</h2>
         <div class="product-grid" id="product-grid"></div>
     </div>
@@ -25,9 +25,11 @@
         <div class="cart-modal-content">
             <span class="close-btn" id="close-cart-btn">&times;</span>
             <h2>Your Cart</h2>
+            <div id="cart-customer-info" class="px-6 pt-2 pb-0 text-gray-700 text-sm"></div>
             <ul id="cart-items" class="cart-items-list"></ul>
             <hr>
             <h3>Total: $<span id="cart-total">0.00</span></h3>
+            <button id="order-now-btn" class="add-to-cart-btn" style="display: none;">Place Order</button>
         </div>
     </div>
     <script>
