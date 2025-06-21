@@ -17,7 +17,7 @@
         <header class="hero">
             <h1>The Freshest Dairy, Delivered.</h1>
             <p>Experience the taste of quality with our range of dairy products.</p>
-:q        </header>
+        </header>
         <h2 class="section-title">Our Products</h2>
         <div class="product-grid" id="product-grid"></div>
     </div>
@@ -47,7 +47,7 @@
             window.addEventListener("click", e => { if (e.target == cartModal) { cartModal.style.display = "none" } });
 
             function addToCart(productId) {
-                const pro:qductToAdd = productsData.find(p => p.id === productId);
+                const productToAdd = productsData.find(p => p.id === productId);
                 const existingItem = cart.find(item => item.id === productId);
                 if (existingItem) {
                     existingItem.quantity++;
@@ -99,7 +99,7 @@
                             <div class="price">$ ${product.price.toFixed(2)}</div>
                             <button class="add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                         </div>`;
-:q                    productGrid.appendChild(productCard);
+                    productGrid.appendChild(productCard);
                 });
             });
         });
