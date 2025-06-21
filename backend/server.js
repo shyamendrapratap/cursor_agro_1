@@ -3,8 +3,51 @@ const path = require("path");
 const app = express();
 const port = 3000;
 
-// Serve static files from the frontend directory
+// Middleware for parsing JSON
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
+
+// In-memory data storage (in production, use a database)
+let users = [
+    { id: 1, username: "admin", password: "admin123", role: "admin" },
+    { id: 2, username: "customer1", password: "customer123", role: "customer" }
+];
+
+let inventory = [
+    { id: 1, productId: 1, quantity: 100, lastUpdated: new Date() },
+    { id: 2, productId: 2, quantity: 50, lastUpdated: new Date() },
+    { id: 3, productId: 3, quantity: 75, lastUpdated: new Date() },
+    { id: 4, productId: 4, quantity: 60, lastUpdated: new Date() },
+    { id: 5, productId: 5, quantity: 200, lastUpdated: new Date() },
+    { id: 6, productId: 6, quantity: 150, lastUpdated: new Date() },
+    { id: 7, productId: 7, quantity: 80, lastUpdated: new Date() }
+];
+
+let orders = [];
+
+// Authentication middleware
+const authenticateUser = (req, res, next) => {
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        req.user = user;
+        next();
+    } else {
+        res.status(401).json({ error: "Invalid credentials" });
+    }
+};
+
+// Login endpoint
+app.post("/api/login", authenticateUser, (req, res) => {
+    res.json({ 
+        success: true, 
+        user: { 
+            id: req.user.id, 
+            username: req.user.username, 
+            role: req.user.role 
+        } 
+    });
+});
 
 // API endpoint for products
 app.get("/api/products", (req, res) => {
@@ -59,6 +102,52 @@ app.get("/api/products", (req, res) => {
             image: "https://images.unsplash.com/photo-1562119423-f739a8823620?auto=format&fit=crop&w=600"
         }
     ]);
+});
+
+// Inventory endpoints
+app.get("/api/inventory", (req, res) => {
+    res.json(inventory);
+});
+
+app.put("/api/inventory/:id", (req, res) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const item = inventory.find(item => item.id === parseInt(id));
+    if (item) {
+        item.quantity = quantity;
+        item.lastUpdated = new Date();
+        res.json(item);
+    } else {
+        res.status(404).json({ error: "Inventory item not found" });
+    }
+});
+
+// Orders endpoints
+app.get("/api/orders", (req, res) => {
+    res.json(orders);
+});
+
+app.post("/api/orders", (req, res) => {
+    const newOrder = {
+        id: orders.length + 1,
+        ...req.body,
+        status: "pending",
+        createdAt: new Date()
+    };
+    orders.push(newOrder);
+    res.json(newOrder);
+});
+
+app.put("/api/orders/:id", (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    const order = orders.find(o => o.id === parseInt(id));
+    if (order) {
+        order.status = status;
+        res.json(order);
+    } else {
+        res.status(404).json({ error: "Order not found" });
+    }
 });
 
 app.listen(port, () => {
