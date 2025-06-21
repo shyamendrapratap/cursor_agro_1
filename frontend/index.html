@@ -4,649 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibha Agro Dairy - Fresh Dairy Products</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        border: "hsl(var(--border))",
-                        input: "hsl(var(--input))",
-                        ring: "hsl(var(--ring))",
-                        background: "hsl(var(--background))",
-                        foreground: "hsl(var(--foreground))",
-                        primary: {
-                            DEFAULT: "hsl(var(--primary))",
-                            foreground: "hsl(var(--primary-foreground))",
-                        },
-                        secondary: {
-                            DEFAULT: "hsl(var(--secondary))",
-                            foreground: "hsl(var(--secondary-foreground))",
-                        },
-                        destructive: {
-                            DEFAULT: "hsl(var(--destructive))",
-                            foreground: "hsl(var(--destructive-foreground))",
-                        },
-                        muted: {
-                            DEFAULT: "hsl(var(--muted))",
-                            foreground: "hsl(var(--muted-foreground))",
-                        },
-                        accent: {
-                            DEFAULT: "hsl(var(--accent))",
-                            foreground: "hsl(var(--accent-foreground))",
-                        },
-                        popover: {
-                            DEFAULT: "hsl(var(--popover))",
-                            foreground: "hsl(var(--popover-foreground))",
-                        },
-                        card: {
-                            DEFAULT: "hsl(var(--card))",
-                            foreground: "hsl(var(--card-foreground))",
-                        },
-                    },
-                    borderRadius: {
-                        lg: "var(--radius)",
-                        md: "calc(var(--radius) - 2px)",
-                        sm: "calc(var(--radius) - 4px)",
-                    },
-                },
-            },
-        }
-    </script>
     <style>
-        :root {
-            --background: 0 0% 100%;
-            --foreground: 222.2 84% 4.9%;
-            --card: 0 0% 100%;
-            --card-foreground: 222.2 84% 4.9%;
-            --popover: 0 0% 100%;
-            --popover-foreground: 222.2 84% 4.9%;
-            --primary: 221.2 83.2% 53.3%;
-            --primary-foreground: 210 40% 98%;
-            --secondary: 210 40% 96%;
-            --secondary-foreground: 222.2 84% 4.9%;
-            --muted: 210 40% 96%;
-            --muted-foreground: 215.4 16.3% 46.9%;
-            --accent: 210 40% 96%;
-            --accent-foreground: 222.2 84% 4.9%;
-            --destructive: 0 84.2% 60.2%;
-            --destructive-foreground: 210 40% 98%;
-            --border: 214.3 31.8% 91.4%;
-            --input: 214.3 31.8% 91.4%;
-            --ring: 221.2 83.2% 53.3%;
-            --radius: 0.5rem;
-        }
-
-        .dark {
-            --background: 222.2 84% 4.9%;
-            --foreground: 210 40% 98%;
-            --card: 222.2 84% 4.9%;
-            --card-foreground: 210 40% 98%;
-            --popover: 222.2 84% 4.9%;
-            --popover-foreground: 210 40% 98%;
-            --primary: 217.2 91.2% 59.8%;
-            --primary-foreground: 222.2 84% 4.9%;
-            --secondary: 217.2 32.6% 17.5%;
-            --secondary-foreground: 210 40% 98%;
-            --muted: 217.2 32.6% 17.5%;
-            --muted-foreground: 215 20.2% 65.1%;
-            --accent: 217.2 32.6% 17.5%;
-            --accent-foreground: 210 40% 98%;
-            --destructive: 0 62.8% 30.6%;
-            --destructive-foreground: 210 40% 98%;
-            --border: 217.2 32.6% 17.5%;
-            --input: 217.2 32.6% 17.5%;
-            --ring: 224.3 76.3% 48%;
-        }
-
-        * {
-            border-color: hsl(var(--border));
-        }
-
-        body {
-            background-color: hsl(var(--background));
-            color: hsl(var(--foreground));
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: calc(var(--radius) - 2px);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: 1px solid transparent;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-        }
-
-        .btn-primary:hover {
-            background-color: hsl(var(--primary) / 0.9);
-        }
-
-        .btn-secondary {
-            background-color: hsl(var(--secondary));
-            color: hsl(var(--secondary-foreground));
-        }
-
-        .btn-secondary:hover {
-            background-color: hsl(var(--secondary) / 0.8);
-        }
-
-        .btn-destructive {
-            background-color: hsl(var(--destructive));
-            color: hsl(var(--destructive-foreground));
-        }
-
-        .btn-destructive:hover {
-            background-color: hsl(var(--destructive) / 0.9);
-        }
-
-        .btn-outline {
-            border-color: hsl(var(--input));
-            background-color: transparent;
-            color: hsl(var(--foreground));
-        }
-
-        .btn-outline:hover {
-            background-color: hsl(var(--accent));
-            color: hsl(var(--accent-foreground));
-        }
-
-        .btn-sm {
-            height: 2.25rem;
-            padding: 0 0.75rem;
-            font-size: 0.875rem;
-        }
-
-        .btn-md {
-            height: 2.5rem;
-            padding: 0 1rem;
-        }
-
-        .btn-lg {
-            height: 2.75rem;
-            padding: 0 1.5rem;
-        }
-
-        .card {
-            background-color: hsl(var(--card));
-            color: hsl(var(--card-foreground));
-            border-radius: calc(var(--radius) - 2px);
-            border: 1px solid hsl(var(--border));
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            border-radius: calc(var(--radius) - 4px);
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 0.125rem 0.5rem;
-        }
-
-        .badge-primary {
-            background-color: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-        }
-
-        .badge-secondary {
-            background-color: hsl(var(--secondary));
-            color: hsl(var(--secondary-foreground));
-        }
-
-        .badge-destructive {
-            background-color: hsl(var(--destructive));
-            color: hsl(var(--destructive-foreground));
-        }
-
-        .animate-in {
-            animation: animateIn 0.5s ease-out;
-        }
-
-        @keyframes animateIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hover-lift {
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-4px);
-        }
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin:0;padding:0;background-color:#f8f9fa;color:#343a40}.navbar{background-color:#fff;border-bottom:1px solid #dee2e6;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}.navbar .logo{font-size:1.5rem;font-weight:700;color:#007bff}.navbar .cart-button{font-size:1rem;font-weight:700;cursor:pointer}.container{max-width:1200px;margin:0 auto;padding:2rem}.hero{background-image:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),url(https://images.unsplash.com/photo-1552035922-1c69a2a72a12?auto=format&fit=crop&w=1950);background-size:cover;background-position:center;color:#fff;padding:6rem 2rem;text-align:center;border-radius:.5rem}.hero h1{font-size:3rem;margin-bottom:1rem}.hero p{font-size:1.25rem}.section-title{text-align:center;font-size:2rem;margin-top:3rem;margin-bottom:2rem}.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem}.product-card{background:#fff;border:1px solid #dee2e6;border-radius:.5rem;text-align:center;overflow:hidden;transition:transform .2s,box-shadow .2s}.product-card:hover{transform:translateY(-5px);box-shadow:0 4px 12px rgba(0,0,0,.1)}.product-card img{width:100%;height:200px;object-fit:cover}.product-card-content{padding:1.5rem}.product-card h3{font-size:1.25rem;margin-top:0;margin-bottom:.5rem}.product-card p{color:#6c757d;margin-bottom:1rem}.product-card .price{font-size:1.5rem;font-weight:700;color:#007bff}#cart-count{background-color:#dc3545;color:#fff;border-radius:50%;padding:.2rem .5rem;font-size:.8rem;vertical-align:top}.add-to-cart-btn{background-color:#007bff;color:#fff;border:none;padding:.75rem 1.5rem;font-size:1rem;border-radius:.25rem;cursor:pointer;margin-top:1rem;transition:background-color .2s}.add-to-cart-btn:hover{background-color:#0056b3}.cart-modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.4)}.cart-modal-content{background-color:#fefefe;margin:10% auto;padding:20px;border:1px solid #888;width:80%;max-width:600px;border-radius:.5rem;animation:slide-in .5s ease-out}.close-btn{color:#aaa;float:right;font-size:28px;font-weight:700;cursor:pointer}.cart-items-list{list-style:none;padding:0}.cart-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid #eee}@keyframes slide-in{from{transform:translateY(-50px);opacity:0}to{transform:translateY(0);opacity:1}}
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-    <!-- Modern Navbar -->
-    <nav class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-gray-200">
-        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <img src="images/vadf.png" alt="Vibha Agro Dairy Logo" class="h-10 w-auto">
-                <h1 class="text-2xl font-bold text-gray-800">Vibha Agro Dairy</h1>
-            </div>
-            
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors font-medium">Home</a>
-                <a href="#products" class="text-gray-600 hover:text-blue-600 transition-colors font-medium">Products</a>
-                <a href="#farm" class="text-gray-600 hover:text-blue-600 transition-colors font-medium">Our Farm</a>
-                <a href="#contact" class="text-gray-600 hover:text-blue-600 transition-colors font-medium">Contact</a>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <button id="open-cart-btn" class="btn btn-primary btn-md relative" style="display: none;">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-                    </svg>
-                    Cart
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                </button>
-                
-                <div id="user-section" class="flex items-center space-x-2">
-                    <button onclick="window.location.href='login.html'" class="btn btn-outline btn-sm">Login</button>
-                </div>
-            </div>
-        </div>
+<body>
+    <nav class="navbar">
+        <div class="logo">Vibha Agro Dairy</div>
+        <div class="cart-button" id="open-cart-btn">Cart (<span id="cart-count">0</span>)</div>
     </nav>
-
-    <!-- Hero Banner Section -->
-    <section id="hero-banner" class="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="images/banner.jpg" alt="Cow grazing in green field" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/30"></div>
-        </div>
-        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-            <h2 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">
-                Fresh from Our Farms
-                <span class="block text-blue-200">Pure Dairy Products</span>
-            </h2>
-            <p class="text-xl md:text-2xl mb-8 opacity-90 drop-shadow max-w-2xl mx-auto">
-                From our family farm to your table - experience the taste of genuine freshness with our premium dairy products
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="btn btn-primary btn-lg text-lg px-8 py-3">
-                    Shop Now
-                </button>
-                <button class="btn btn-outline btn-lg text-lg px-8 py-3 bg-white/10 backdrop-blur border-white text-white hover:bg-white/20">
-                    Learn More
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features-section" class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center animate-in">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">100% Natural</h3>
-                    <p class="text-gray-600">Our cows graze on natural pastures, ensuring the purest milk possible.</p>
-                </div>
-                <div class="text-center animate-in">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Farm Fresh</h3>
-                    <p class="text-gray-600">Delivered daily from our local farms, never more than 24 hours from cow to bottle.</p>
-                </div>
-                <div class="text-center animate-in">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
-                    <p class="text-gray-600">Rigorous quality testing ensures every product meets our high standards.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Products Section -->
-    <section id="products" class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Fresh Dairy Collection</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Choose from our premium selection of fresh, natural, and specialty dairy products
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid">
-                <!-- Products will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Farm Showcase Section -->
-    <section id="farm-showcase" class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Farm</h2>
-                <p class="text-lg text-gray-600">Experience the quality and care that goes into every product</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                    <img src="/images/cattle1.jpg" alt="Dairy Farm" class="rounded-lg shadow-lg">
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Vibha Agro Dairy</h3>
-                    <p class="text-gray-600 mb-6">
-                        Our farm is dedicated to providing the highest quality dairy products. 
-                        We maintain strict hygiene standards and ensure all our products are fresh and nutritious.
-                    </p>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-user text-green-600 mr-3"></i>
-                            <span><strong>Proprietor:</strong> Upendra Kumar Singh</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-green-600 mr-3"></i>
-                            <span><strong>Phone:</strong> +91 9431887715</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-map-marker-alt text-green-600 mr-3"></i>
-                            <span><strong>Location:</strong> Rural Area, Dairy Farm Road</span>
-                        </div>
-                    </div>
-                    <div class="mt-6">
-                        <button onclick="showMore()" class="btn btn-primary mr-4">
-                            <i class="fas fa-info-circle mr-2"></i>Learn More
-                        </button>
-                        <button onclick="showNow()" class="btn btn-secondary">
-                            <i class="fas fa-eye mr-2"></i>Show Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Map Section -->
-    <section id="map-section" class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Visit Our Farm</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Come visit our farm and see how we produce the freshest dairy products
-                </p>
-            </div>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <div class="card overflow-hidden">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.1234567890123!2d85.2575!3d25.778694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQ2JzQzLjMiTiA4NcKwMTUnMjcuMCJF!5e0!3m2!1sen!2sin!4v1234567890123"
-                        width="100%" 
-                        height="400" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-                
-                <div class="card p-6">
-                    <h3 class="text-2xl font-bold text-blue-600 mb-4">Farm Location</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span class="text-gray-700"><strong>Coordinates:</strong> 25°46'43.3"N 85°15'27.0"E</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                            </svg>
-                            <span class="text-gray-700"><strong>Address:</strong> Vibha Agro Dairy Farm, Bihar, India</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span class="text-gray-700"><strong>Directions:</strong> Located in the heart of Bihar's dairy region</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Cart Modal -->
-    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
-                <div class="flex items-center justify-between p-6 border-b">
-                    <h2 class="text-xl font-semibold">Your Cart</h2>
-                    <button id="close-cart-btn" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                </div>
-                
-                <div class="p-6">
-                    <ul id="cart-items" class="space-y-4">
-                        <!-- Cart items will be loaded here -->
-                    </ul>
-                    
-                    <div class="border-t pt-4 mt-4">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-lg font-semibold">Total:</span>
-                            <span class="text-xl font-bold text-blue-600">$<span id="cart-total">0.00</span></span>
-                        </div>
-                        
-                        <div class="space-y-2">
-                            <button id="order-now-btn" class="btn btn-primary w-full" style="display: none;">
-                                Order Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div class="container">
+        <header class="hero">
+            <h1>The Freshest Dairy, Delivered.</h1>
+            <p>Experience the taste of quality with our range of dairy products.</p>
+:q        </header>
+        <h2 class="section-title">Our Products</h2>
+        <div class="product-grid" id="product-grid"></div>
     </div>
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close-btn" id="close-cart-btn">&times;</span>
+            <h2>Your Cart</h2>
+            <ul id="cart-items" class="cart-items-list"></ul>
+            <hr>
+            <h3>Total: $<span id="cart-total">0.00</span></h3>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <img src="images/vadf.png" alt="Vibha Agro Dairy Logo" class="h-8 w-auto">
-                        <h3 class="text-xl font-bold">Vibha Agro Dairy</h3>
-                    </div>
-                    <p class="text-gray-300">Fresh dairy products delivered to your doorstep</p>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact Information</h4>
-                    <div class="space-y-2 text-gray-300">
-                        <p><strong>Proprietor:</strong> Upendra Kumar Singh</p>
-                        <p><strong>Phone:</strong> <a href="tel:9431887715" class="hover:text-white">+91 9431887715</a></p>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <div class="space-y-2 text-gray-300">
-                        <p>Fresh Milk • Curd • Buffalo Milk</p>
-                        <p>Desi Cow Milk • Eggs • Greek Yogurt</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-                <p>&copy; 2025 Vibha Agro Dairy. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        let currentUser = null;
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-            setupCustomerInterface();
-        });
-
-        function checkAuth() {
-            const user = JSON.parse(localStorage.getItem('user'));
-            currentUser = user;
-            
-            const userSection = document.getElementById('user-section');
-            const cartButton = document.getElementById('open-cart-btn');
-            
-            if (user) {
-                userSection.innerHTML = `
-                    <span class="text-gray-700">Welcome, ${user.username}</span>
-                    <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-sm">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                        My Orders
-                    </button>
-                    <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
-                `;
-                cartButton.style.display = 'inline-flex';
-            } else {
-                userSection.innerHTML = `
-                    <button onclick="window.location.href='login.html'" class="btn btn-outline btn-sm">Login</button>
-                `;
-                cartButton.style.display = 'none';
-            }
-            
-            // Refresh products to show/hide Add to Cart buttons
-            loadProducts();
-        }
-
-        function loadProducts() {
-            const productGrid = document.getElementById("product-grid");
-            if (!productGrid) return;
-            
-            fetch("/api/products").then(res => res.json()).then(products => {
-                productsData = products;
-                productGrid.innerHTML = '';
-                
-                if (products.length === 0) {
-                    productGrid.innerHTML = "<p class='text-center text-gray-500 col-span-full py-8'>No products found.</p>";
-                    return;
-                }
-                
-                products.forEach(product => {
-                    const productCard = document.createElement("div");
-                    productCard.className = "card hover-lift group";
-                    
-                    // Check if user is logged in to show Add to Cart button
-                    const user = JSON.parse(localStorage.getItem('user'));
-                    const addToCartButton = user ? `
-                        <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-                            </svg>
-                            Add to Cart
-                        </button>
-                    ` : '';
-                    
-                    productCard.innerHTML = `
-                        <div class="relative overflow-hidden rounded-t-lg">
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-primary">Fresh</span>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
-                            <p class="text-gray-600 mb-3">${product.description}</p>
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
-                            </div>
-                            ${addToCartButton}
-                        </div>`;
-                    productGrid.appendChild(productCard);
-                });
-            });
-        }
-
-        function setupCustomerInterface() {
-            const user = JSON.parse(localStorage.getItem('user'));
-            
-            if (user && user.role === 'customer') {
-                // Hide promotional sections for logged-in customers
-                const sectionsToHide = [
-                    'hero-banner',
-                    'features-section', 
-                    'farm-showcase',
-                    'map-section'
-                ];
-                
-                sectionsToHide.forEach(sectionId => {
-                    const section = document.getElementById(sectionId);
-                    if (section) {
-                        section.style.display = 'none';
-                    }
-                });
-                
-                // Simplify navbar for customers
-                const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
-                navbarLinks.forEach(link => {
-                    link.style.display = 'none';
-                });
-                
-                // Update page title and add customer welcome
-                document.title = 'Order Dairy Products - Vibha Agro Dairy';
-                
-                // Add customer welcome section
-                const productsSection = document.getElementById('products');
-                if (productsSection) {
-                    const welcomeDiv = document.createElement('div');
-                    welcomeDiv.className = 'text-center mb-8 bg-blue-50 p-6 rounded-lg';
-                    welcomeDiv.innerHTML = `
-                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome back, ${user.username}!</h1>
-                        <p class="text-lg text-gray-600 mb-4">Ready to order fresh dairy products?</p>
-                        <div class="flex justify-center space-x-4">
-                            <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-md">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                                View My Orders
-                            </button>
-                            <button onclick="scrollToProducts()" class="btn btn-primary btn-md">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-                                </svg>
-                                Start Shopping
-                            </button>
-                        </div>
-                    `;
-                    productsSection.insertBefore(welcomeDiv, productsSection.firstChild);
-                }
-            }
-        }
-
-        function scrollToProducts() {
-            document.getElementById('products').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
             const productGrid = document.getElementById("product-grid");
             const cartCount = document.getElementById("cart-count");
@@ -655,23 +39,15 @@
             const closeCartBtn = document.getElementById("close-cart-btn");
             const cartItemsContainer = document.getElementById("cart-items");
             const cartTotal = document.getElementById("cart-total");
-            const orderNowBtn = document.getElementById("order-now-btn");
             let productsData = [];
             let cart = [];
 
-            // Check user authentication
-            checkAuth();
-
-            openCartBtn.addEventListener("click", () => cartModal.classList.remove("hidden"));
-            closeCartBtn.addEventListener("click", () => cartModal.classList.add("hidden"));
-            cartModal.addEventListener("click", e => { 
-                if (e.target == cartModal) { 
-                    cartModal.classList.add("hidden") 
-                } 
-            });
+            openCartBtn.addEventListener("click", () => cartModal.style.display = "block");
+            closeCartBtn.addEventListener("click", () => cartModal.style.display = "none");
+            window.addEventListener("click", e => { if (e.target == cartModal) { cartModal.style.display = "none" } });
 
             function addToCart(productId) {
-                const productToAdd = productsData.find(p => p.id === productId);
+                const pro:qductToAdd = productsData.find(p => p.id === productId);
                 const existingItem = cart.find(item => item.id === productId);
                 if (existingItem) {
                     existingItem.quantity++;
@@ -684,28 +60,14 @@
             function updateCartDisplay() {
                 cartItemsContainer.innerHTML = "";
                 if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = "<li class='text-center text-gray-500 py-8'>Your cart is empty.</li>";
-                    orderNowBtn.style.display = "none";
+                    cartItemsContainer.innerHTML = "<li>Your cart is empty.</li>";
                 } else {
-                    cart.forEach((item, index) => {
+                    cart.forEach(item => {
                         const itemEl = document.createElement("li");
-                        itemEl.className = "flex items-center justify-between p-4 bg-gray-50 rounded-lg";
-                        itemEl.innerHTML = `
-                            <div class="flex-1">
-                                <div class="font-semibold">${item.name}</div>
-                                <div class="flex items-center space-x-2 mt-2">
-                                    <button class="quantity-btn decrease-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">-</button>
-                                    <span class="quantity-display font-medium">${item.quantity}</span>
-                                    <button class="quantity-btn increase-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">+</button>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
-                                <button class="delete-btn w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm" data-index="${index}">×</button>
-                            </div>`;
+                        itemEl.className = "cart-item";
+                        itemEl.innerHTML = `<span>${item.name} x ${item.quantity}</span> <span>$${(item.price * item.quantity).toFixed(2)}</span>`;
                         cartItemsContainer.appendChild(itemEl);
                     });
-                    orderNowBtn.style.display = "block";
                 }
                 const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
                 cartCount.innerText = totalItems;
@@ -720,119 +82,27 @@
                 }
             });
 
-            orderNowBtn.addEventListener("click", () => {
-                if (cart.length > 0) {
-                    submitOrder();
-                }
-            });
-
-            async function submitOrder() {
-                const user = JSON.parse(localStorage.getItem('user'));
-                if (!user) {
-                    alert('Please login to place an order');
-                    window.location.href = 'login.html';
+            fetch("/api/products").then(res => res.json()).then(products => {
+                productsData = products;
+                if (products.length === 0) {
+                    productGrid.innerHTML = "<p>No products found.</p>";
                     return;
                 }
-
-                const orderData = {
-                    customerName: user.username,
-                    items: cart,
-                    total: parseFloat(cartTotal.innerText),
-                    customerId: user.id
-                };
-
-                try {
-                    const response = await fetch('/api/orders', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(orderData)
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        // Order successful
-                        alert(`Order #${data.id} placed successfully! We'll contact you soon for delivery details.`);
-                        
-                        // Show inventory update details if available
-                        if (data.inventoryUpdated) {
-                            console.log('Inventory updated:', data.inventoryUpdated);
-                        }
-                        
-                        // Ask if user wants to print bill
-                        if (confirm('Would you like to print your bill?')) {
-                            window.open(`/api/bills/${data.id}/pdf`, '_blank');
-                        }
-                        
-                        cart = [];
-                        updateCartDisplay();
-                        cartModal.classList.add("hidden");
-                    } else {
-                        // Handle inventory validation errors
-                        if (data.error === "Inventory validation failed") {
-                            let errorMessage = "Order failed due to inventory issues:\n\n";
-                            data.details.forEach(detail => {
-                                errorMessage += `• ${detail}\n`;
-                            });
-                            alert(errorMessage);
-                        } else {
-                            alert(data.message || 'Failed to place order. Please try again.');
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error submitting order:', error);
-                    alert('Error placing order. Please try again.');
-                }
-            }
-
-            cartItemsContainer.addEventListener("click", e => {
-                if (e.target.classList.contains("delete-btn")) {
-                    const index = parseInt(e.target.dataset.index);
-                    cart.splice(index, 1);
-                    updateCartDisplay();
-                }
-                if (e.target.classList.contains("increase-btn")) {
-                    const index = parseInt(e.target.dataset.index);
-                    cart[index].quantity++;
-                    updateCartDisplay();
-                }
-                if (e.target.classList.contains("decrease-btn")) {
-                    const index = parseInt(e.target.dataset.index);
-                    if (cart[index].quantity > 1) {
-                        cart[index].quantity--;
-                    } else {
-                        cart.splice(index, 1);
-                    }
-                    updateCartDisplay();
-                }
+                products.forEach(product => {
+                    const productCard = document.createElement("div");
+                    productCard.className = "product-card";
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="product-card-content">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <div class="price">$ ${product.price.toFixed(2)}</div>
+                            <button class="add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
+                        </div>`;
+                    productGrid.appendChild(productCard);
+                });
             });
         });
-        
-        function logout() {
-            localStorage.removeItem('user');
-            checkAuth(); // This will refresh the products and hide cart functionality
-        }
-
-        // Farm showcase functions
-        function showMore() {
-            alert('Learn More about Vibha Agro Dairy:\n\n' +
-                  '• Established dairy farm with modern facilities\n' +
-                  '• Strict quality control and hygiene standards\n' +
-                  '• Fresh products delivered daily\n' +
-                  '• Sustainable farming practices\n' +
-                  '• Certified organic products\n' +
-                  '• 24/7 customer support\n\n' +
-                  'Contact us: +91 9431887715');
-        }
-
-        function showNow() {
-            // Scroll to products section
-            document.getElementById('products').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
-        }
     </script>
 </body>
 </html>
