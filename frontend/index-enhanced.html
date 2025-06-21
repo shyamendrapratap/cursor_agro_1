@@ -647,31 +647,14 @@
                         body: JSON.stringify(orderData)
                     });
 
-                    const data = await response.json();
-
                     if (response.ok) {
-                        // Order successful
-                        alert(`Order #${data.id} placed successfully! We'll contact you soon for delivery details.`);
-                        
-                        // Show inventory update details if available
-                        if (data.inventoryUpdated) {
-                            console.log('Inventory updated:', data.inventoryUpdated);
-                        }
-                        
+                        const order = await response.json();
+                        alert(`Order #${order.id} placed successfully! We'll contact you soon for delivery details.`);
                         cart = [];
                         updateCartDisplay();
                         cartModal.classList.add("hidden");
                     } else {
-                        // Handle inventory validation errors
-                        if (data.error === "Inventory validation failed") {
-                            let errorMessage = "Order failed due to inventory issues:\n\n";
-                            data.details.forEach(detail => {
-                                errorMessage += `• ${detail}\n`;
-                            });
-                            alert(errorMessage);
-                        } else {
-                            alert(data.message || 'Failed to place order. Please try again.');
-                        }
+                        alert('Failed to place order. Please try again.');
                     }
                 } catch (error) {
                     console.error('Error submitting order:', error);
@@ -741,4 +724,4 @@
         }
     </script>
 </body>
-</html>
+</html> 

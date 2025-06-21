@@ -67,4 +67,8 @@ logs
 
 # Temporary folders
 tmp/
-temp/ 
+temp/
+
+# Application data files
+backend/data/
+backend/backups/ 
