@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "productId": 1,
+    "quantity": 50,
+    "lastUpdated": "2025-06-21T17:54:58.156Z",
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "productId": 2,
+    "quantity": 80,
+    "lastUpdated": "2025-06-21T18:21:18.442Z",
+    "stock": 80
+  },
+  {
+    "id": 3,
+    "productId": 3,
+    "quantity": 15,
+    "lastUpdated": "2025-06-21T18:26:34.945Z",
+    "stock": 15
+  },
+  {
+    "id": 4,
+    "productId": 4,
+    "quantity": 8,
+    "lastUpdated": "2025-06-21T18:26:40.286Z",
+    "stock": 8
+  },
+  {
+    "id": 5,
+    "productId": 5,
+    "quantity": 2,
+    "lastUpdated": "2025-06-21T18:27:52.555Z",
+    "stock": 2
+  },
+  {
+    "id": 6,
+    "productId": 6,
+    "quantity": 150,
+    "lastUpdated": "2025-06-21T16:11:23.232Z"
+  },
+  {
+    "id": 7,
+    "productId": 7,
+    "quantity": 80,
+    "lastUpdated": "2025-06-21T16:11:23.232Z"
+  }
+]

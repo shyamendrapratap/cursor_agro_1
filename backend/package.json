@@ -7,6 +7,11 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "express": "^4.17.1"
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "jsreport-chrome-pdf": "^1.10.0",
+        "jsreport-core": "^2.10.1",
+        "jsreport-jsrender": "^2.1.1",
+        "node-fetch": "^3.3.2"
     }
 }

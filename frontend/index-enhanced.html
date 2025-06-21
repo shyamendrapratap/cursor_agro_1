@@ -246,7 +246,7 @@
             </div>
             
             <div class="flex items-center space-x-4">
-                <button id="open-cart-btn" class="btn btn-primary btn-md relative">
+                <button id="open-cart-btn" class="btn btn-primary btn-md relative" style="display: none;">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
                     </svg>
@@ -341,30 +341,30 @@
     <section id="farm" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Farm & Cattle</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Farm & Facilities</h2>
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Take a look at our happy cattle and beautiful farm where we produce the freshest dairy products
+                    Take a virtual tour of our state-of-the-art dairy farm and see how we maintain the highest standards
                 </p>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="card hover-lift group">
                     <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/cattle1.jpg" alt="Healthy cow grazing" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <img src="images/cattle1.jpg" alt="Modern dairy farm" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Healthy Cattle</h3>
-                        <p class="text-gray-600">Our cows graze freely in natural pastures, ensuring the highest quality milk production.</p>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Modern Facilities</h3>
+                        <p class="text-gray-600">State-of-the-art dairy processing units with automated milking systems.</p>
                     </div>
                 </div>
                 
                 <div class="card hover-lift group">
                     <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/cattle2.jpg" alt="Buffalo in farm" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <img src="images/cattle2.jpg" alt="Healthy cows" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Buffalo Herd</h3>
-                        <p class="text-gray-600">We maintain a healthy herd of buffaloes for rich and creamy buffalo milk.</p>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Healthy Herd</h3>
+                        <p class="text-gray-600">Well-cared-for cattle with regular veterinary check-ups and balanced nutrition.</p>
                     </div>
                 </div>
                 
@@ -407,6 +407,85 @@
                         <p class="text-gray-600">Every step of our process is monitored to ensure the highest quality dairy products.</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Testimonials Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Don't just take our word for it - hear from our satisfied customers
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Priya Sharma</h4>
+                            <p class="text-sm text-gray-500">Regular Customer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The fresh milk from Vibha Agro Dairy is simply the best! My family loves the taste and quality. The delivery is always on time."</p>
+                </div>
+                
+                <div class="card p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Rajesh Kumar</h4>
+                            <p class="text-sm text-gray-500">Local Restaurant Owner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"We've been sourcing our dairy products from Vibha Agro for over 2 years. Their consistency and quality have never disappointed us."</p>
+                </div>
+                
+                <div class="card p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="h-6 w-6 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Meera Patel</h4>
+                            <p class="text-sm text-gray-500">Health Conscious Customer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"As someone who's health-conscious, I appreciate the natural and organic approach of Vibha Agro Dairy. Their products are pure and trustworthy."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Subscription Section -->
+    <section class="py-16 bg-blue-600">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">Stay Updated</h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Subscribe to our newsletter for the latest updates, special offers, and dairy farming insights
+            </p>
+            <div class="max-w-md mx-auto">
+                <div class="flex gap-2">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" 
+                           class="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                    <button onclick="subscribeNewsletter()" class="btn btn-primary px-6 py-3">
+                        Subscribe
+                    </button>
+                </div>
+                <p class="text-sm text-blue-200 mt-2">We respect your privacy. Unsubscribe at any time.</p>
             </div>
         </div>
     </section>
@@ -470,7 +549,7 @@
                     <h2 class="text-xl font-semibold">Your Cart</h2>
                     <button id="close-cart-btn" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                 </div>
-                
+                <div id="cart-customer-info" class="px-6 pt-2 pb-0 text-gray-700 text-sm"></div>
                 <div class="p-6">
                     <ul id="cart-items" class="space-y-4">
                         <!-- Cart items will be loaded here -->
@@ -529,7 +608,158 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        let currentUser = null;
+        let productsData = [];
+        let cart = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupCustomerInterface();
+            initializeCart();
+        });
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            currentUser = user;
+            
+            const userSection = document.getElementById('user-section');
+            const cartButton = document.getElementById('open-cart-btn');
+            
+            if (user) {
+                userSection.innerHTML = `
+                    <span class="text-gray-700">Welcome, ${user.username}</span>
+                    <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-sm">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        My Orders
+                    </button>
+                    <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
+                    ${user.role === 'admin' ? '<button onclick="window.location.href=\'admin.html\'" class="btn btn-secondary btn-sm">Admin Panel</button>' : ''}
+                `;
+                cartButton.style.display = 'inline-flex';
+            } else {
+                userSection.innerHTML = `
+                    <button onclick="window.location.href='login.html'" class="btn btn-outline btn-sm">Login</button>
+                `;
+                cartButton.style.display = 'none';
+            }
+            
+            // Refresh products to show/hide Add to Cart buttons
+            loadProducts();
+        }
+
+        function loadProducts() {
+            const productGrid = document.getElementById("product-grid");
+            if (!productGrid) return;
+            
+            fetch("/api/products").then(res => res.json()).then(products => {
+                productsData = products;
+                productGrid.innerHTML = '';
+                
+                if (products.length === 0) {
+                    productGrid.innerHTML = "<p class='text-center text-gray-500 col-span-full py-8'>No products found.</p>";
+                    return;
+                }
+                
+                products.forEach(product => {
+                    const productCard = document.createElement("div");
+                    productCard.className = "card hover-lift group";
+                    
+                    // Check if user is logged in to show Add to Cart button
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const addToCartButton = user ? `
+                        <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    ` : '';
+                    
+                    productCard.innerHTML = `
+                        <div class="relative overflow-hidden rounded-t-lg">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute top-3 right-3">
+                                <span class="badge badge-primary">Fresh</span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
+                            <p class="text-gray-600 mb-3">${product.description}</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
+                            </div>
+                            ${addToCartButton}
+                        </div>`;
+                    productGrid.appendChild(productCard);
+                });
+            });
+        }
+
+        function setupCustomerInterface() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            if (user && user.role === 'customer') {
+                // Hide promotional sections for logged-in customers
+                const sectionsToHide = [
+                    'hero-banner',
+                    'features-section', 
+                    'farm-showcase',
+                    'map-section'
+                ];
+                
+                sectionsToHide.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                // Simplify navbar for customers
+                const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
+                navbarLinks.forEach(link => {
+                    link.style.display = 'none';
+                });
+                
+                // Update page title and add customer welcome
+                document.title = 'Order Dairy Products - Vibha Agro Dairy';
+                
+                // Add customer welcome section
+                const productsSection = document.getElementById('products');
+                if (productsSection) {
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.className = 'text-center mb-8 bg-blue-50 p-6 rounded-lg';
+                    welcomeDiv.innerHTML = `
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome back, ${user.username}!</h1>
+                        <p class="text-lg text-gray-600 mb-4">Ready to order fresh dairy products?</p>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-md">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                View My Orders
+                            </button>
+                            <button onclick="scrollToProducts()" class="btn btn-primary btn-md">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                                </svg>
+                                Start Shopping
+                            </button>
+                        </div>
+                    `;
+                    productsSection.insertBefore(welcomeDiv, productsSection.firstChild);
+                }
+            }
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function initializeCart() {
             const productGrid = document.getElementById("product-grid");
             const cartCount = document.getElementById("cart-count");
             const cartModal = document.getElementById("cart-modal");
@@ -538,8 +768,6 @@
             const cartItemsContainer = document.getElementById("cart-items");
             const cartTotal = document.getElementById("cart-total");
             const orderNowBtn = document.getElementById("order-now-btn");
-            let productsData = [];
-            let cart = [];
 
             // Check user authentication
             checkAuth();
@@ -551,49 +779,6 @@
                     cartModal.classList.add("hidden") 
                 } 
             });
-
-            function addToCart(productId) {
-                const productToAdd = productsData.find(p => p.id === productId);
-                const existingItem = cart.find(item => item.id === productId);
-                if (existingItem) {
-                    existingItem.quantity++;
-                } else {
-                    cart.push({ ...productToAdd, quantity: 1 });
-                }
-                updateCartDisplay();
-            }
-
-            function updateCartDisplay() {
-                cartItemsContainer.innerHTML = "";
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = "<li class='text-center text-gray-500 py-8'>Your cart is empty.</li>";
-                    orderNowBtn.style.display = "none";
-                } else {
-                    cart.forEach((item, index) => {
-                        const itemEl = document.createElement("li");
-                        itemEl.className = "flex items-center justify-between p-4 bg-gray-50 rounded-lg";
-                        itemEl.innerHTML = `
-                            <div class="flex-1">
-                                <div class="font-semibold">${item.name}</div>
-                                <div class="flex items-center space-x-2 mt-2">
-                                    <button class="quantity-btn decrease-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">-</button>
-                                    <span class="quantity-display font-medium">${item.quantity}</span>
-                                    <button class="quantity-btn increase-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">+</button>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
-                                <button class="delete-btn w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm" data-index="${index}">×</button>
-                            </div>`;
-                        cartItemsContainer.appendChild(itemEl);
-                    });
-                    orderNowBtn.style.display = "block";
-                }
-                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-                cartCount.innerText = totalItems;
-                const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                cartTotal.innerText = total.toFixed(2);
-            }
 
             productGrid.addEventListener("click", e => {
                 if (e.target.classList.contains("add-to-cart-btn")) {
@@ -607,60 +792,6 @@
                     submitOrder();
                 }
             });
-
-            function checkAuth() {
-                const user = JSON.parse(localStorage.getItem('user'));
-                const userSection = document.getElementById('user-section');
-                
-                if (user) {
-                    userSection.innerHTML = `
-                        <span class="text-gray-700">Welcome, ${user.username}</span>
-                        <button onclick="logout()" class="btn btn-destructive btn-sm">Logout</button>
-                        ${user.role === 'admin' ? '<button onclick="window.location.href=\'admin.html\'" class="btn btn-secondary btn-sm">Admin Panel</button>' : ''}
-                    `;
-                } else {
-                    userSection.innerHTML = '<button onclick="window.location.href=\'login.html\'" class="btn btn-outline btn-sm">Login</button>';
-                }
-            }
-
-            async function submitOrder() {
-                const user = JSON.parse(localStorage.getItem('user'));
-                if (!user) {
-                    alert('Please login to place an order');
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                const orderData = {
-                    customerName: user.username,
-                    items: cart,
-                    total: parseFloat(cartTotal.innerText),
-                    customerId: user.id
-                };
-
-                try {
-                    const response = await fetch('/api/orders', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(orderData)
-                    });
-
-                    if (response.ok) {
-                        const order = await response.json();
-                        alert(`Order #${order.id} placed successfully! We'll contact you soon for delivery details.`);
-                        cart = [];
-                        updateCartDisplay();
-                        cartModal.classList.add("hidden");
-                    } else {
-                        alert('Failed to place order. Please try again.');
-                    }
-                } catch (error) {
-                    console.error('Error submitting order:', error);
-                    alert('Error placing order. Please try again.');
-                }
-            }
 
             cartItemsContainer.addEventListener("click", e => {
                 if (e.target.classList.contains("delete-btn")) {
@@ -683,45 +814,200 @@
                     updateCartDisplay();
                 }
             });
+        }
 
-            fetch("/api/products").then(res => res.json()).then(products => {
-                productsData = products;
-                if (products.length === 0) {
-                    productGrid.innerHTML = "<p class='text-center text-gray-500 col-span-full py-8'>No products found.</p>";
-                    return;
-                }
-                products.forEach(product => {
-                    const productCard = document.createElement("div");
-                    productCard.className = "card hover-lift group";
-                    productCard.innerHTML = `
-                        <div class="relative overflow-hidden rounded-t-lg">
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-primary">Fresh</span>
+        function addToCart(productId) {
+            const productToAdd = productsData.find(p => p.id === productId);
+            if (!productToAdd) {
+                console.error('Product not found:', productId);
+                return;
+            }
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...productToAdd, quantity: 1 });
+            }
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const customerInfoDiv = document.getElementById('cart-customer-info');
+            const cartItemsContainer = document.getElementById("cart-items");
+            const cartCount = document.getElementById("cart-count");
+            const cartTotal = document.getElementById("cart-total");
+            const orderNowBtn = document.getElementById("order-now-btn");
+            
+            const user = JSON.parse(localStorage.getItem('user'));
+            let infoHtml = '';
+            if (user) {
+                infoHtml += `<span><strong>Name:</strong> ${user.username}</span>`;
+            }
+            // Optionally, show last order number if you want to keep it visible after order placement
+            if (window.lastOrderId) {
+                infoHtml += `<span class="ml-4"><strong>Order #:</strong> ${window.lastOrderId}</span>`;
+            }
+            customerInfoDiv.innerHTML = infoHtml;
+            
+            cartItemsContainer.innerHTML = "";
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<li class='text-center text-gray-500 py-8'>Your cart is empty.</li>";
+                orderNowBtn.style.display = "none";
+            } else {
+                cart.forEach((item, index) => {
+                    const itemEl = document.createElement("li");
+                    itemEl.className = "flex items-center justify-between p-4 bg-gray-50 rounded-lg";
+                    itemEl.innerHTML = `
+                        <div class="flex-1">
+                            <div class="font-semibold">${item.name}</div>
+                            <div class="flex items-center space-x-2 mt-2">
+                                <button class="quantity-btn decrease-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">-</button>
+                                <span class="quantity-display font-medium">${item.quantity}</span>
+                                <button class="quantity-btn increase-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">+</button>
                             </div>
                         </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
-                            <p class="text-gray-600 mb-3">${product.description}</p>
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
-                            </div>
-                            <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-                                </svg>
-                                Add to Cart
-                            </button>
+                        <div class="flex items-center space-x-3">
+                            <span class="font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="delete-btn w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm" data-index="${index}">×</button>
                         </div>`;
-                    productGrid.appendChild(productCard);
+                    cartItemsContainer.appendChild(itemEl);
                 });
-            });
-        });
+                orderNowBtn.style.display = "block";
+            }
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.innerText = totalItems;
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            cartTotal.innerText = total.toFixed(2);
+        }
+
+        async function submitOrder() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to place an order');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const cartTotal = document.getElementById("cart-total");
+            const orderData = {
+                customerName: user.username,
+                items: cart,
+                total: parseFloat(cartTotal.innerText),
+                customerId: user.id
+            };
+
+            try {
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    const order = await response.json();
+                    window.lastOrderId = order.id;
+                    alert(`Order #${order.id} placed successfully!\nStatus: ${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}\nWe'll contact you soon for delivery details.`);
+                    cart = [];
+                    updateCartDisplay();
+                    const cartModal = document.getElementById("cart-modal");
+                    cartModal.classList.add("hidden");
+                } else {
+                    alert('Failed to place order. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting order:', error);
+                alert('Error placing order. Please try again.');
+            }
+        }
         
         function logout() {
             localStorage.removeItem('user');
-            window.location.reload();
+            cart = []; // Clear cart on logout
+            checkAuth(); // This will refresh the products and hide cart functionality
         }
+
+        // Newsletter subscription function
+        async function subscribeNewsletter() {
+            const email = document.getElementById('newsletter-email').value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                if (response.ok) {
+                    alert('Thank you for subscribing! You\'ll receive updates about our latest products and offers.');
+                    document.getElementById('newsletter-email').value = '';
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to subscribe. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error subscribing to newsletter:', error);
+                alert('Error subscribing to newsletter. Please try again.');
+            }
+        }
+
+        // Product filtering functionality
+        function filterProducts(category) {
+            const productCards = document.querySelectorAll('#product-grid .card');
+            productCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.classList.add('animate-in');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Search products functionality
+        function searchProducts(query) {
+            const productCards = document.querySelectorAll('#product-grid .card');
+            productCards.forEach(card => {
+                const productName = card.querySelector('h3').textContent.toLowerCase();
+                const productDesc = card.querySelector('p').textContent.toLowerCase();
+                const searchTerm = query.toLowerCase();
+                
+                if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.classList.add('animate-in');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add search functionality to the page
+        function addSearchBar() {
+            const productsSection = document.getElementById('products');
+            const searchBar = document.createElement('div');
+            searchBar.className = 'mb-8 max-w-md mx-auto';
+            searchBar.innerHTML = `
+                <div class="relative">
+                    <input type="text" id="product-search" placeholder="Search products..." 
+                           class="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           onkeyup="searchProducts(this.value)">
+                    <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            `;
+            productsSection.querySelector('.text-center').after(searchBar);
+        }
+
+        // Initialize search functionality
+        addSearchBar();
     </script>
 </body>
 </html> 

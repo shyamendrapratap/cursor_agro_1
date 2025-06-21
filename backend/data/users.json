@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "admin123",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "username": "customer1",
+    "password": "customer123",
+    "role": "customer"
+  },
+  {
+    "id": 3,
+    "username": "Shanvi",
+    "password": "Ramsita",
+    "role": "customer",
+    "createdAt": "2025-06-21T18:17:46.047Z",
+    "active": true,
+    "updatedAt": "2025-06-21T18:19:24.897Z"
+  }
+]

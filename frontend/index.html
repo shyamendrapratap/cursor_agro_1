@@ -246,7 +246,7 @@
             </div>
             
             <div class="flex items-center space-x-4">
-                <button id="open-cart-btn" class="btn btn-primary btn-md relative">
+                <button id="open-cart-btn" class="btn btn-primary btn-md relative" style="display: none;">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
                     </svg>
@@ -262,7 +262,7 @@
     </nav>
 
     <!-- Hero Banner Section -->
-    <section class="relative h-[70vh] flex items-center justify-center overflow-hidden">
+    <section id="hero-banner" class="relative h-[70vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0">
             <img src="images/banner.jpg" alt="Cow grazing in green field" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/30"></div>
@@ -287,7 +287,7 @@
     </section>
 
     <!-- Features Section -->
-    <section class="py-16 bg-white">
+    <section id="features-section" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center animate-in">
@@ -338,73 +338,44 @@
     </section>
 
     <!-- Farm Showcase Section -->
-    <section id="farm" class="py-16 bg-white">
-        <div class="container mx-auto px-4">
+    <section id="farm-showcase" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Farm & Cattle</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Take a look at our happy cattle and beautiful farm where we produce the freshest dairy products
-                </p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Farm</h2>
+                <p class="text-lg text-gray-600">Experience the quality and care that goes into every product</p>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/cattle1.jpg" alt="Healthy cow grazing" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Healthy Cattle</h3>
-                        <p class="text-gray-600">Our cows graze freely in natural pastures, ensuring the highest quality milk production.</p>
-                    </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <img src="/images/cattle1.jpg" alt="Dairy Farm" class="rounded-lg shadow-lg">
                 </div>
-                
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/cattle2.jpg" alt="Buffalo in farm" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Vibha Agro Dairy</h3>
+                    <p class="text-gray-600 mb-6">
+                        Our farm is dedicated to providing the highest quality dairy products. 
+                        We maintain strict hygiene standards and ensure all our products are fresh and nutritious.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-user text-green-600 mr-3"></i>
+                            <span><strong>Proprietor:</strong> Upendra Kumar Singh</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-green-600 mr-3"></i>
+                            <span><strong>Phone:</strong> +91 9431887715</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-green-600 mr-3"></i>
+                            <span><strong>Location:</strong> Rural Area, Dairy Farm Road</span>
+                        </div>
                     </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Buffalo Herd</h3>
-                        <p class="text-gray-600">We maintain a healthy herd of buffaloes for rich and creamy buffalo milk.</p>
-                    </div>
-                </div>
-                
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/cattle3.jpg" alt="Desi cow" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Desi Cow Breeds</h3>
-                        <p class="text-gray-600">Traditional Indian cow breeds that produce A2 milk with natural goodness.</p>
-                    </div>
-                </div>
-                
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/diff.jpg" alt="Farm landscape" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Natural Environment</h3>
-                        <p class="text-gray-600">Our farm is located in the heart of Bihar's dairy region with lush green pastures.</p>
-                    </div>
-                </div>
-                
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/2.jpg" alt="Farm activities" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Daily Farm Activities</h3>
-                        <p class="text-gray-600">We follow traditional and modern dairy farming practices for the best results.</p>
-                    </div>
-                </div>
-                
-                <div class="card hover-lift group">
-                    <div class="relative overflow-hidden rounded-t-lg">
-                        <img src="images/3.jpg" alt="Quality assurance" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Quality Assurance</h3>
-                        <p class="text-gray-600">Every step of our process is monitored to ensure the highest quality dairy products.</p>
+                    <div class="mt-6">
+                        <button onclick="showMore()" class="btn btn-primary mr-4">
+                            <i class="fas fa-info-circle mr-2"></i>Learn More
+                        </button>
+                        <button onclick="showNow()" class="btn btn-secondary">
+                            <i class="fas fa-eye mr-2"></i>Show Now
+                        </button>
                     </div>
                 </div>
             </div>
@@ -412,7 +383,7 @@
     </section>
 
     <!-- Map Section -->
-    <section id="contact" class="py-16 bg-gray-50">
+    <section id="map-section" class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">Visit Our Farm</h2>
@@ -489,7 +460,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+    </div>
         </div>
     </div>
 
@@ -508,8 +479,8 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Contact Information</h4>
                     <div class="space-y-2 text-gray-300">
-                        <p><strong>Proprietor:</strong> Shanvi Singh</p>
-                        <p><strong>Phone:</strong> <a href="tel:9246871484" class="hover:text-white">+91 9246871484</a></p>
+                        <p><strong>Proprietor:</strong> Upendra Kumar Singh</p>
+                        <p><strong>Phone:</strong> <a href="tel:9431887715" class="hover:text-white">+91 9431887715</a></p>
                     </div>
                 </div>
                 
@@ -523,12 +494,159 @@
             </div>
             
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-                <p>&copy; 2024 Vibha Agro Dairy. All rights reserved.</p>
+                <p>&copy; 2025 Vibha Agro Dairy. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
+        let currentUser = null;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupCustomerInterface();
+        });
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            currentUser = user;
+            
+            const userSection = document.getElementById('user-section');
+            const cartButton = document.getElementById('open-cart-btn');
+            
+            if (user) {
+                userSection.innerHTML = `
+                    <span class="text-gray-700">Welcome, ${user.username}</span>
+                    <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-sm">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        My Orders
+                    </button>
+                    <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
+                `;
+                cartButton.style.display = 'inline-flex';
+            } else {
+                userSection.innerHTML = `
+                    <button onclick="window.location.href='login.html'" class="btn btn-outline btn-sm">Login</button>
+                `;
+                cartButton.style.display = 'none';
+            }
+            
+            // Refresh products to show/hide Add to Cart buttons
+            loadProducts();
+        }
+
+        function loadProducts() {
+            const productGrid = document.getElementById("product-grid");
+            if (!productGrid) return;
+            
+            fetch("/api/products").then(res => res.json()).then(products => {
+                productsData = products;
+                productGrid.innerHTML = '';
+                
+                if (products.length === 0) {
+                    productGrid.innerHTML = "<p class='text-center text-gray-500 col-span-full py-8'>No products found.</p>";
+                    return;
+                }
+                
+                products.forEach(product => {
+                    const productCard = document.createElement("div");
+                    productCard.className = "card hover-lift group";
+                    
+                    // Check if user is logged in to show Add to Cart button
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const addToCartButton = user ? `
+                        <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    ` : '';
+                    
+                    productCard.innerHTML = `
+                        <div class="relative overflow-hidden rounded-t-lg">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute top-3 right-3">
+                                <span class="badge badge-primary">Fresh</span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
+                            <p class="text-gray-600 mb-3">${product.description}</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
+                            </div>
+                            ${addToCartButton}
+                        </div>`;
+                    productGrid.appendChild(productCard);
+                });
+            });
+        }
+
+        function setupCustomerInterface() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            if (user && user.role === 'customer') {
+                // Hide promotional sections for logged-in customers
+                const sectionsToHide = [
+                    'hero-banner',
+                    'features-section', 
+                    'farm-showcase',
+                    'map-section'
+                ];
+                
+                sectionsToHide.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                // Simplify navbar for customers
+                const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
+                navbarLinks.forEach(link => {
+                    link.style.display = 'none';
+                });
+                
+                // Update page title and add customer welcome
+                document.title = 'Order Dairy Products - Vibha Agro Dairy';
+                
+                // Add customer welcome section
+                const productsSection = document.getElementById('products');
+                if (productsSection) {
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.className = 'text-center mb-8 bg-blue-50 p-6 rounded-lg';
+                    welcomeDiv.innerHTML = `
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome back, ${user.username}!</h1>
+                        <p class="text-lg text-gray-600 mb-4">Ready to order fresh dairy products?</p>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-md">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                View My Orders
+                            </button>
+                            <button onclick="scrollToProducts()" class="btn btn-primary btn-md">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                                </svg>
+                                Start Shopping
+                            </button>
+                        </div>
+                    `;
+                    productsSection.insertBefore(welcomeDiv, productsSection.firstChild);
+                }
+            }
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             const productGrid = document.getElementById("product-grid");
             const cartCount = document.getElementById("cart-count");
@@ -608,21 +726,6 @@
                 }
             });
 
-            function checkAuth() {
-                const user = JSON.parse(localStorage.getItem('user'));
-                const userSection = document.getElementById('user-section');
-                
-                if (user) {
-                    userSection.innerHTML = `
-                        <span class="text-gray-700">Welcome, ${user.username}</span>
-                        <button onclick="logout()" class="btn btn-destructive btn-sm">Logout</button>
-                        ${user.role === 'admin' ? '<button onclick="window.location.href=\'admin.html\'" class="btn btn-secondary btn-sm">Admin Panel</button>' : ''}
-                    `;
-                } else {
-                    userSection.innerHTML = '<button onclick="window.location.href=\'login.html\'" class="btn btn-outline btn-sm">Login</button>';
-                }
-            }
-
             async function submitOrder() {
                 const user = JSON.parse(localStorage.getItem('user'));
                 if (!user) {
@@ -656,6 +759,11 @@
                         // Show inventory update details if available
                         if (data.inventoryUpdated) {
                             console.log('Inventory updated:', data.inventoryUpdated);
+                        }
+                        
+                        // Ask if user wants to print bill
+                        if (confirm('Would you like to print your bill?')) {
+                            window.open(`/api/bills/${data.id}/pdf`, '_blank');
                         }
                         
                         cart = [];
@@ -700,44 +808,30 @@
                     updateCartDisplay();
                 }
             });
-
-            fetch("/api/products").then(res => res.json()).then(products => {
-                productsData = products;
-                if (products.length === 0) {
-                    productGrid.innerHTML = "<p class='text-center text-gray-500 col-span-full py-8'>No products found.</p>";
-                    return;
-                }
-                products.forEach(product => {
-                    const productCard = document.createElement("div");
-                    productCard.className = "card hover-lift group";
-                    productCard.innerHTML = `
-                        <div class="relative overflow-hidden rounded-t-lg">
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute top-3 right-3">
-                                <span class="badge badge-primary">Fresh</span>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
-                            <p class="text-gray-600 mb-3">${product.description}</p>
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
-                            </div>
-                            <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-                                </svg>
-                                Add to Cart
-                            </button>
-                        </div>`;
-                    productGrid.appendChild(productCard);
-                });
-            });
         });
         
         function logout() {
             localStorage.removeItem('user');
-            window.location.reload();
+            checkAuth(); // This will refresh the products and hide cart functionality
+        }
+
+        // Farm showcase functions
+        function showMore() {
+            alert('Learn More about Vibha Agro Dairy:\n\n' +
+                  '• Established dairy farm with modern facilities\n' +
+                  '• Strict quality control and hygiene standards\n' +
+                  '• Fresh products delivered daily\n' +
+                  '• Sustainable farming practices\n' +
+                  '• Certified organic products\n' +
+                  '• 24/7 customer support\n\n' +
+                  'Contact us: +91 9431887715');
+        }
+
+        function showNow() {
+            // Scroll to products section
+            document.getElementById('products').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
         }
     </script>
 </body>

@@ -1,108 +1,275 @@
 const fs = require('fs');
 const path = require('path');
 
-// Data file paths
-const INVENTORY_FILE = path.join(__dirname, "data/inventory.json");
-const ORDERS_FILE = path.join(__dirname, "data/orders.json");
-const USERS_FILE = path.join(__dirname, "data/users.json");
-
-// Backup directory
-const BACKUP_DIR = path.join(__dirname, "backups");
+const dataDir = path.join(__dirname, 'data');
+const backupDir = path.join(__dirname, 'backups');
 
 // Ensure backup directory exists
-if (!fs.existsSync(BACKUP_DIR)) {
-    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+if (!fs.existsSync(backupDir)) {
+    fs.mkdirSync(backupDir, { recursive: true });
 }
 
+// Data files to backup
+const dataFiles = [
+    'inventory.json',
+    'orders.json',
+    'users.json',
+    'investments.json',
+    'expenses.json'
+];
+
 function createBackup() {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const backupPath = path.join(BACKUP_DIR, `backup-${timestamp}`);
+    const timestamp = new Date();
+    const dateStr = timestamp.toISOString().replace(/[:.]/g, '-').split('T')[0];
+    const timeStr = timestamp.toTimeString().split(' ')[0].replace(/:/g, '-');
+    
+    const backupName = `backup-${dateStr}-${timeStr}`;
+    const backupPath = path.join(backupDir, backupName);
+    
+    // Create backup directory
+    if (!fs.existsSync(backupPath)) {
+        fs.mkdirSync(backupPath, { recursive: true });
+    }
+    
+    // Copy all data files
+    dataFiles.forEach(file => {
+        const sourcePath = path.join(dataDir, file);
+        const destPath = path.join(backupPath, file);
+        
+        if (fs.existsSync(sourcePath)) {
+            fs.copyFileSync(sourcePath, destPath);
+        }
+    });
+    
+    // Create backup metadata
+    const metadata = {
+        timestamp: timestamp.toISOString(),
+        files: dataFiles,
+        type: 'regular'
+    };
+    
+    fs.writeFileSync(path.join(backupPath, 'metadata.json'), JSON.stringify(metadata, null, 2));
+    
+    console.log(`Backup created: ${backupName}`);
+    return backupName;
+}
+
+function createMonthlyBackup() {
+    const timestamp = new Date();
+    const monthStr = `${timestamp.getFullYear()}-${String(timestamp.getMonth() + 1).padStart(2, '0')}`;
+    
+    const backupName = `monthly-${monthStr}`;
+    const backupPath = path.join(backupDir, backupName);
+    
+    // Check if monthly backup already exists
+    if (fs.existsSync(backupPath)) {
+        console.log(`Monthly backup for ${monthStr} already exists`);
+        return backupName;
+    }
     
     // Create backup directory
     fs.mkdirSync(backupPath, { recursive: true });
     
-    // Copy data files
-    const files = [
-        { src: INVENTORY_FILE, dest: path.join(backupPath, 'inventory.json') },
-        { src: ORDERS_FILE, dest: path.join(backupPath, 'orders.json') },
-        { src: USERS_FILE, dest: path.join(backupPath, 'users.json') }
-    ];
-    
-    files.forEach(file => {
-        if (fs.existsSync(file.src)) {
-            fs.copyFileSync(file.src, file.dest);
-            console.log(`Backed up: ${path.basename(file.src)}`);
+    // Copy all data files
+    dataFiles.forEach(file => {
+        const sourcePath = path.join(dataDir, file);
+        const destPath = path.join(backupPath, file);
+        
+        if (fs.existsSync(sourcePath)) {
+            fs.copyFileSync(sourcePath, destPath);
         }
     });
     
-    console.log(`Backup created at: ${backupPath}`);
-    return backupPath;
+    // Create backup metadata
+    const metadata = {
+        timestamp: timestamp.toISOString(),
+        files: dataFiles,
+        type: 'monthly'
+    };
+    
+    fs.writeFileSync(path.join(backupPath, 'metadata.json'), JSON.stringify(metadata, null, 2));
+    
+    console.log(`Monthly backup created: ${backupName}`);
+    return backupName;
 }
 
-function restoreBackup(backupPath) {
-    if (!fs.existsSync(backupPath)) {
-        console.error('Backup path does not exist');
-        return false;
+function createYearlyBackup() {
+    const timestamp = new Date();
+    const yearStr = timestamp.getFullYear().toString();
+    
+    const backupName = `yearly-${yearStr}`;
+    const backupPath = path.join(backupDir, backupName);
+    
+    // Check if yearly backup already exists
+    if (fs.existsSync(backupPath)) {
+        console.log(`Yearly backup for ${yearStr} already exists`);
+        return backupName;
     }
     
-    const files = [
-        { src: path.join(backupPath, 'inventory.json'), dest: INVENTORY_FILE },
-        { src: path.join(backupPath, 'orders.json'), dest: ORDERS_FILE },
-        { src: path.join(backupPath, 'users.json'), dest: USERS_FILE }
-    ];
+    // Create backup directory
+    fs.mkdirSync(backupPath, { recursive: true });
     
-    files.forEach(file => {
-        if (fs.existsSync(file.src)) {
-            fs.copyFileSync(file.src, file.dest);
-            console.log(`Restored: ${path.basename(file.dest)}`);
+    // Copy all data files
+    dataFiles.forEach(file => {
+        const sourcePath = path.join(dataDir, file);
+        const destPath = path.join(backupPath, file);
+        
+        if (fs.existsSync(sourcePath)) {
+            fs.copyFileSync(sourcePath, destPath);
         }
     });
     
-    console.log('Backup restored successfully');
-    return true;
+    // Create backup metadata
+    const metadata = {
+        timestamp: timestamp.toISOString(),
+        files: dataFiles,
+        type: 'yearly'
+    };
+    
+    fs.writeFileSync(path.join(backupPath, 'metadata.json'), JSON.stringify(metadata, null, 2));
+    
+    console.log(`Yearly backup created: ${backupName}`);
+    return backupName;
 }
 
-function listBackups() {
-    if (!fs.existsSync(BACKUP_DIR)) {
-        console.log('No backups found');
-        return;
-    }
-    
-    const backups = fs.readdirSync(BACKUP_DIR)
-        .filter(item => fs.statSync(path.join(BACKUP_DIR, item)).isDirectory())
+function cleanupOldBackups() {
+    const backups = fs.readdirSync(backupDir)
+        .filter(item => {
+            const itemPath = path.join(backupDir, item);
+            return fs.statSync(itemPath).isDirectory() && item.startsWith('backup-');
+        })
         .sort()
         .reverse();
     
-    console.log('Available backups:');
-    backups.forEach(backup => {
-        const backupPath = path.join(BACKUP_DIR, backup);
-        const stats = fs.statSync(backupPath);
-        console.log(`- ${backup} (${stats.mtime.toLocaleString()})`);
-    });
+    // Keep only the 5 latest regular backups
+    if (backups.length > 5) {
+        const toDelete = backups.slice(5);
+        toDelete.forEach(backup => {
+            const backupPath = path.join(backupDir, backup);
+            fs.rmSync(backupPath, { recursive: true, force: true });
+            console.log(`Deleted old backup: ${backup}`);
+        });
+    }
 }
 
-// Command line interface
-const command = process.argv[2];
+function listBackups() {
+    const backups = fs.readdirSync(backupDir)
+        .filter(item => {
+            const itemPath = path.join(backupDir, item);
+            return fs.statSync(itemPath).isDirectory();
+        })
+        .map(backup => {
+            const backupPath = path.join(backupDir, backup);
+            const metadataPath = path.join(backupPath, 'metadata.json');
+            
+            let metadata = {};
+            if (fs.existsSync(metadataPath)) {
+                metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+            }
+            
+            return {
+                name: backup,
+                type: metadata.type || 'unknown',
+                timestamp: metadata.timestamp || 'unknown',
+                size: getDirectorySize(backupPath)
+            };
+        })
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    return backups;
+}
 
-switch (command) {
-    case 'create':
-        createBackup();
-        break;
-    case 'restore':
-        const backupPath = process.argv[3];
-        if (!backupPath) {
-            console.error('Please specify backup path');
-            process.exit(1);
+function getDirectorySize(dirPath) {
+    let size = 0;
+    const files = fs.readdirSync(dirPath);
+    
+    files.forEach(file => {
+        const filePath = path.join(dirPath, file);
+        const stats = fs.statSync(filePath);
+        
+        if (stats.isFile()) {
+            size += stats.size;
         }
-        restoreBackup(path.join(BACKUP_DIR, backupPath));
-        break;
-    case 'list':
-        listBackups();
-        break;
-    default:
-        console.log('Usage:');
-        console.log('  node backup.js create    - Create a new backup');
-        console.log('  node backup.js restore <backup-name> - Restore from backup');
-        console.log('  node backup.js list      - List available backups');
-        break;
+    });
+    
+    return size;
+}
+
+function restoreBackup(backupName) {
+    const backupPath = path.join(backupDir, backupName);
+    
+    if (!fs.existsSync(backupPath)) {
+        throw new Error(`Backup ${backupName} not found`);
+    }
+    
+    // Verify backup integrity
+    dataFiles.forEach(file => {
+        const backupFilePath = path.join(backupPath, file);
+        if (!fs.existsSync(backupFilePath)) {
+            throw new Error(`Backup file ${file} missing in ${backupName}`);
+        }
+    });
+    
+    // Create restore backup before restoring
+    const restoreBackupName = `restore-backup-${new Date().toISOString().replace(/[:.]/g, '-').split('T')[0]}`;
+    createBackup();
+    
+    // Restore files
+    dataFiles.forEach(file => {
+        const sourcePath = path.join(backupPath, file);
+        const destPath = path.join(dataDir, file);
+        
+        fs.copyFileSync(sourcePath, destPath);
+    });
+    
+    console.log(`Backup ${backupName} restored successfully`);
+    console.log(`Previous state backed up as ${restoreBackupName}`);
+    
+    return true;
+}
+
+// Schedule regular backups (every 30 minutes)
+function startBackupScheduler() {
+    console.log('Starting backup scheduler...');
+    
+    // Create initial backup
+    createBackup();
+    
+    // Schedule regular backups every 30 minutes
+    setInterval(() => {
+        createBackup();
+        cleanupOldBackups();
+    }, 30 * 60 * 1000); // 30 minutes
+    
+    // Check for monthly backup (first day of month)
+    setInterval(() => {
+        const now = new Date();
+        if (now.getDate() === 1 && now.getHours() === 0 && now.getMinutes() === 0) {
+            createMonthlyBackup();
+        }
+    }, 60 * 1000); // Check every minute
+    
+    // Check for yearly backup (first day of year)
+    setInterval(() => {
+        const now = new Date();
+        if (now.getMonth() === 0 && now.getDate() === 1 && now.getHours() === 0 && now.getMinutes() === 0) {
+            createYearlyBackup();
+        }
+    }, 60 * 1000); // Check every minute
+}
+
+// Export functions for use in other modules
+module.exports = {
+    createBackup,
+    createMonthlyBackup,
+    createYearlyBackup,
+    cleanupOldBackups,
+    listBackups,
+    restoreBackup,
+    startBackupScheduler
+};
+
+// Start scheduler if this file is run directly
+if (require.main === module) {
+    startBackupScheduler();
 } 

@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "customerName": "customer1",
+    "items": [
+      {
+        "id": 1,
+        "name": "Fresh Milk",
+        "price": 2.5,
+        "description": "Pure, pasteurized cow's milk.",
+        "image": "/images/cattle1.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 2.5,
+    "customerId": 2,
+    "status": "cancelled",
+    "createdAt": "2025-06-21T16:26:43.436Z",
+    "updatedAt": "2025-06-21T18:39:07.875Z"
+  },
+  {
+    "id": 2,
+    "customerName": "customer1",
+    "customerId": 2,
+    "items": [
+      {
+        "id": 1,
+        "name": "Fresh Milk",
+        "price": 9.66,
+        "description": "Pure, pasteurized cow's milk.",
+        "image": "/images/cattle1.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 9.66,
+    "status": "cancelled",
+    "createdAt": "2025-06-21T16:48:09.712Z",
+    "updatedAt": "2025-06-21T18:30:24.952Z"
+  },
+  {
+    "id": 3,
+    "customerName": "customer1",
+    "customerId": 2,
+    "items": [
+      {
+        "id": 2,
+        "name": "Curd",
+        "price": 6.99,
+        "description": "Thick and creamy traditional curd.",
+        "image": "/images/check.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 6.99,
+    "status": "completed",
+    "createdAt": "2025-06-21T16:54:40.321Z",
+    "updatedAt": "2025-06-21T18:30:29.615Z"
+  },
+  {
+    "id": 4,
+    "customerName": "customer1",
+    "customerId": 2,
+    "items": [
+      {
+        "id": 3,
+        "name": "Buffalow Milk",
+        "price": 3.25,
+        "description": "Rich and creamy buffalo milk.",
+        "image": "/images/cattle2.jpg",
+        "quantity": 4
+      }
+    ],
+    "total": 13,
+    "status": "completed",
+    "createdAt": "2025-06-21T17:01:33.991Z",
+    "updatedAt": "2025-06-21T18:30:33.550Z"
+  },
+  {
+    "id": 5,
+    "customerName": "customer1",
+    "customerId": 2,
+    "items": [
+      {
+        "id": 4,
+        "name": "Desi Cow Milk",
+        "price": 4,
+        "description": "Pure A2 milk from indigenous cow breeds.",
+        "image": "/images/cattle3.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 4,
+    "status": "completed",
+    "createdAt": "2025-06-21T17:03:14.403Z",
+    "updatedAt": "2025-06-21T18:30:37.151Z"
+  }
+]
