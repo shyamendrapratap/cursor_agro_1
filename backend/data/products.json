@@ -8,16 +8,16 @@
   },
   {
     "id": 2,
-    "name": "Traditional Curd",
+    "name": "Traditional Clay Pot Curd",
     "price": 25.00,
-    "description": "Homemade style curd with perfect consistency and probiotic benefits",
+    "description": "Authentic Indian curd set in clay pot, made fresh daily with natural fermentation process",
     "image": "/images/curd.jpg"
   },
   {
     "id": 3,
-    "name": "Natural Yogurt",
+    "name": "Fresh Natural Yogurt",
     "price": 30.00,
-    "description": "Smooth and creamy yogurt made from fresh milk, perfect for a healthy breakfast",
+    "description": "Creamy, smooth yogurt made from fresh milk, perfect for breakfast or healthy snacking",
     "image": "/images/yogurt.jpg"
   },
   {
