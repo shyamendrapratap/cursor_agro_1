@@ -647,7 +647,7 @@
                     <div class="border-t pt-4 mt-4">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-lg font-semibold">Total:</span>
-                            <span class="text-xl font-bold text-blue-600">$<span id="cart-total">0.00</span></span>
+                            <span class="text-xl font-bold text-blue-600">₹<span id="cart-total">0.00</span></span>
                         </div>
                         
                         <div class="space-y-2">
@@ -699,36 +699,49 @@
     <!-- Wallet Modal -->
     <div id="wallet-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-semibold">My Wallet</h3>
-                <button onclick="closeWalletModal()" class="text-gray-500 hover:text-gray-700">
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="mb-4">
-                <div class="text-2xl font-bold mb-2">Balance: ₹<span id="wallet-balance">0.00</span></div>
-                <button onclick="showAddMoneyForm()" class="btn btn-primary btn-sm">Add Money</button>
-            </div>
-            <div id="add-money-form" class="hidden mb-4">
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Amount (₹)</label>
-                    <input type="number" id="add-money-amount" min="1" step="0.01" class="form-input w-full" required>
+            
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <div class="text-center">
+                    <p class="text-sm text-blue-600 mb-1">Available Balance</p>
+                    <p class="text-3xl font-bold text-blue-700">₹<span id="wallet-balance">0.00</span></p>
                 </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Payment Method</label>
-                    <select id="add-money-payment-method" class="form-select w-full" required>
-                        <option value="phonepe">PhonePe</option>
-                        <option value="googlepay">Google Pay</option>
-                    </select>
-                </div>
-                <button onclick="addMoneyToWallet()" class="btn btn-primary btn-sm">Add</button>
             </div>
-            <div class="mt-4">
-                <h4 class="font-semibold mb-2">Recent Transactions</h4>
-                <div id="wallet-transactions" class="space-y-2 max-h-48 overflow-y-auto">
-                    <!-- Transactions will be populated here -->
+            
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-medium mb-2">Recent Transactions</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <div>
+                                <p class="font-medium">Credit</p>
+                                <p class="text-sm text-gray-500">Today</p>
+                            </div>
+                            <span class="font-medium text-green-600">+₹100</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <div>
+                                <p class="font-medium">Debit</p>
+                                <p class="text-sm text-gray-500">Today</p>
+                            </div>
+                            <span class="font-medium text-red-600">-₹50</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h4 class="font-medium mb-2">Add Money</h4>
+                    <div class="flex gap-2">
+                        <input type="number" id="add-amount" class="form-input flex-1" placeholder="Enter amount" min="1" step="0.01">
+                        <button onclick="addMoneyToWallet()" class="btn btn-primary">Add</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -803,22 +816,24 @@
             if (user) {
                 userSection.innerHTML = `
                     <span class="text-gray-700">Welcome, ${user.username}</span>
-                    <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-sm">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                        My Orders
-                    </button>
-                    <button onclick="showWalletModal()" class="btn btn-outline btn-sm">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                        </svg>
-                        Wallet
-                    </button>
+                    ${user.role === 'customer' ? `
+                        <button onclick="window.location.href='orders.html'" class="btn btn-outline btn-sm">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            My Orders
+                        </button>
+                        <button onclick="showWalletModal()" class="btn btn-outline btn-sm">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                            Wallet
+                        </button>
+                    ` : ''}
                     <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
                     ${user.role === 'admin' ? '<button onclick="window.location.href=\'admin.html\'" class="btn btn-secondary btn-sm">Admin Panel</button>' : ''}
                 `;
-                cartButton.style.display = 'inline-flex';
+                cartButton.style.display = user.role === 'customer' ? 'inline-flex' : 'none';
             } else {
                 userSection.innerHTML = `
                     <button onclick="window.location.href='login.html'" class="btn btn-outline btn-sm">Login</button>
@@ -847,9 +862,9 @@
                     const productCard = document.createElement("div");
                     productCard.className = "card hover-lift group";
                     
-                    // Check if user is logged in to show Add to Cart button
+                    // Check if user is logged in and is a customer to show Add to Cart button
                     const user = JSON.parse(localStorage.getItem('user'));
-                    const addToCartButton = user ? `
+                    const addToCartButton = user && user.role === 'customer' ? `
                         <button class="btn btn-primary w-full add-to-cart-btn" data-product-id="${product.id}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
@@ -869,7 +884,7 @@
                             <h3 class="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">${product.name}</h3>
                             <p class="text-gray-600 mb-3">${product.description}</p>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-xl font-bold text-blue-600">$${product.price.toFixed(2)}</span>
+                                <span class="text-xl font-bold text-blue-600">₹${product.price.toFixed(2)}</span>
                             </div>
                             ${addToCartButton}
                         </div>`;
@@ -1049,52 +1064,55 @@
         }
 
         function updateCartDisplay() {
-            const customerInfoDiv = document.getElementById('cart-customer-info');
-            const cartItemsContainer = document.getElementById("cart-items");
-            const cartCount = document.getElementById("cart-count");
-            const cartTotal = document.getElementById("cart-total");
-            const orderNowBtn = document.getElementById("order-now-btn");
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const cartCount = document.getElementById('cart-count');
             
-            const user = JSON.parse(localStorage.getItem('user'));
-            let infoHtml = '';
-            if (user) {
-                infoHtml += `<span><strong>Name:</strong> ${user.username}</span>`;
-            }
-            // Optionally, show last order number if you want to keep it visible after order placement
-            if (window.lastOrderId) {
-                infoHtml += `<span class="ml-4"><strong>Order #:</strong> ${window.lastOrderId}</span>`;
-            }
-            customerInfoDiv.innerHTML = infoHtml;
+            if (!cartItemsContainer || !cartTotal || !cartCount) return;
             
-            cartItemsContainer.innerHTML = "";
+            // Get cart items from localStorage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cartCount.textContent = cart.length;
+            
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = "<li class='text-center text-gray-500 py-8'>Your cart is empty.</li>";
-                orderNowBtn.style.display = "none";
-            } else {
-                cart.forEach((item, index) => {
-                    const itemEl = document.createElement("li");
-                    itemEl.className = "flex items-center justify-between p-4 bg-gray-50 rounded-lg";
-                    itemEl.innerHTML = `
-                        <div class="flex-1">
-                            <div class="font-semibold">${item.name}</div>
-                            <div class="flex items-center space-x-2 mt-2">
-                                <button class="quantity-btn decrease-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">-</button>
-                                <span class="quantity-display font-medium">${item.quantity}</span>
-                                <button class="quantity-btn increase-btn w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-sm" data-index="${index}">+</button>
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">🛒</div>
+                        <p class="text-gray-500">Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.textContent = '0.00';
+                return;
+            }
+            
+            // Calculate total and display items
+            let total = 0;
+            cartItemsContainer.innerHTML = cart.map(item => {
+                const product = productsData.find(p => p.id === item.productId);
+                if (!product) return '';
+                total += product.price * item.quantity;
+                return `
+                    <div class="flex items-center justify-between p-4 border-b">
+                        <div class="flex items-center">
+                            <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-lg">
+                            <div class="ml-4">
+                                <h4 class="font-medium">${product.name}</h4>
+                                <p class="text-gray-600">₹${product.price.toFixed(2)} × ${item.quantity}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
-                            <button class="delete-btn w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm" data-index="${index}">×</button>
-                        </div>`;
-                    cartItemsContainer.appendChild(itemEl);
-                });
-                orderNowBtn.style.display = "block";
-            }
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.innerText = totalItems;
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            cartTotal.innerText = total.toFixed(2);
+                        <div class="flex items-center">
+                            <span class="font-medium mr-4">₹${(product.price * item.quantity).toFixed(2)}</span>
+                            <button onclick="removeFromCart(${product.id})" class="text-red-500 hover:text-red-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            cartTotal.textContent = total.toFixed(2);
         }
 
         async function submitOrder() {
@@ -1242,86 +1260,98 @@
         }
 
         async function showWalletModal() {
-            if (!currentUser) {
-                window.location.href = 'login.html';
-                return;
-            }
-
             try {
-                // Fetch wallet balance
-                const balanceResponse = await authenticatedFetch('/api/wallet/balance');
-                const balanceData = await balanceResponse.json();
-                document.getElementById('wallet-balance').textContent = balanceData.balance.toFixed(2);
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user || user.role !== 'customer') {
+                    alert('Please login as a customer to access wallet features.');
+                    return;
+                }
 
-                // Fetch transactions
-                const transactionsResponse = await authenticatedFetch('/api/wallet/transactions');
-                const transactionsData = await transactionsResponse.json();
+                const response = await fetch(`/api/wallet/${user.id}`);
+                const walletData = await response.json();
                 
-                const transactionsHtml = transactionsData.transactions.map(t => `
-                    <div class="p-2 bg-gray-50 rounded-lg">
-                        <div class="flex justify-between items-center">
-                            <span class="${t.type === 'CREDIT' ? 'text-green-600' : 'text-red-600'}">
-                                ${t.type === 'CREDIT' ? '+' : '-'}₹${t.amount.toFixed(2)}
-                            </span>
-                            <span class="text-sm text-gray-500">${new Date(t.timestamp).toLocaleDateString()}</span>
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-semibold">My Wallet</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
-                        <div class="text-sm text-gray-600">
-                            ${t.type === 'CREDIT' ? `Via ${t.paymentMethod}` : `Order #${t.orderId}`}
+                        
+                        <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                            <div class="text-center">
+                                <p class="text-sm text-blue-600 mb-1">Available Balance</p>
+                                <p class="text-3xl font-bold text-blue-700">₹${walletData.balance.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium mb-2">Recent Transactions</h4>
+                                <div class="space-y-2">
+                                    ${walletData.transactions.map(tx => `
+                                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                                            <div>
+                                                <p class="font-medium">${tx.type}</p>
+                                                <p class="text-sm text-gray-500">${new Date(tx.date).toLocaleDateString()}</p>
+                                            </div>
+                                            <span class="font-medium ${tx.type === 'credit' ? 'text-green-600' : 'text-red-600'}">
+                                                ${tx.type === 'credit' ? '+' : '-'}₹${tx.amount.toFixed(2)}
+                                            </span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-4">
+                                <h4 class="font-medium mb-2">Add Money</h4>
+                                <div class="flex gap-2">
+                                    <input type="number" id="add-amount" class="form-input flex-1" placeholder="Enter amount" min="1" step="0.01">
+                                    <button onclick="addMoneyToWallet()" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                `).join('');
+                `;
                 
-                document.getElementById('wallet-transactions').innerHTML = transactionsHtml || '<p class="text-gray-500">No transactions yet</p>';
-                document.getElementById('wallet-modal').classList.remove('hidden');
+                document.body.appendChild(modal);
             } catch (error) {
-                console.error('Error loading wallet:', error);
-                alert('Failed to load wallet information. Please try again.');
+                console.error('Error showing wallet:', error);
+                alert('Failed to load wallet information');
             }
-        }
-
-        function closeWalletModal() {
-            document.getElementById('wallet-modal').classList.add('hidden');
-            document.getElementById('add-money-form').classList.add('hidden');
-        }
-
-        function showAddMoneyForm() {
-            document.getElementById('add-money-form').classList.remove('hidden');
         }
 
         async function addMoneyToWallet() {
-            const amount = parseFloat(document.getElementById('add-money-amount').value);
-            const paymentMethod = document.getElementById('add-money-payment-method').value;
-
+            const amountInput = document.getElementById('add-amount');
+            const amount = parseFloat(amountInput.value);
+            
             if (!amount || amount <= 0) {
                 alert('Please enter a valid amount');
                 return;
             }
-
+            
             try {
-                // For demo purposes, we'll simulate a successful payment
-                const transactionId = `DEMO_${Date.now()}`;
-
-                const response = await authenticatedFetch('/api/wallet/add', {
+                const user = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch(`/api/wallet/${user.id}/add`, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        amount,
-                        paymentMethod,
-                        transactionId
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount })
                 });
-
+                
                 if (response.ok) {
-                    alert('Money added successfully!');
-                    document.getElementById('add-money-form').classList.add('hidden');
-                    document.getElementById('add-money-amount').value = '';
-                    showWalletModal(); // Refresh wallet info
+                    alert(`Successfully added ₹${amount.toFixed(2)} to your wallet`);
+                    showWalletModal(); // Refresh wallet modal
                 } else {
-                    const error = await response.json();
-                    alert(error.error || 'Failed to add money');
+                    throw new Error('Failed to add money');
                 }
             } catch (error) {
                 console.error('Error adding money:', error);
-                alert('Failed to add money. Please try again.');
+                alert('Failed to add money to wallet');
             }
         }
     </script>
