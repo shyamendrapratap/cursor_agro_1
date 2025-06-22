@@ -201,8 +201,9 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    // Store user info in localStorage
+                    // Store user info and token in localStorage
                     localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('token', data.token);
                     
                     showMessage('Login successful! Redirecting...', 'success');
                     
@@ -236,6 +237,12 @@
                 successDiv.classList.remove('hidden');
                 errorDiv.classList.add('hidden');
             }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
         }
     </script>
 </body>

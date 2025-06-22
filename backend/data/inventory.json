@@ -2,48 +2,43 @@
   {
     "id": 1,
     "productId": 1,
-    "quantity": 50,
-    "lastUpdated": "2025-06-21T20:27:13.062Z",
-    "stock": 16
+    "quantity": 100,
+    "stock": 100,
+    "lastUpdated": "2025-06-22T11:44:01.234Z"
   },
   {
     "id": 2,
     "productId": 2,
-    "quantity": 80,
-    "lastUpdated": "2025-06-21T20:27:13.056Z",
-    "stock": 59
+    "quantity": 100,
+    "stock": 100,
+    "lastUpdated": "2025-06-22T11:43:11.604Z"
   },
   {
     "id": 3,
     "productId": 3,
-    "quantity": 15,
-    "lastUpdated": "2025-06-21T20:27:13.062Z",
-    "stock": 9
+    "quantity": 100,
+    "stock": 100,
+    "lastUpdated": "2025-06-22T11:46:55.061Z"
   },
   {
     "id": 4,
     "productId": 4,
-    "quantity": 8,
-    "lastUpdated": "2025-06-21T18:26:40.286Z",
-    "stock": 8
+    "quantity": 22,
+    "stock": 22,
+    "lastUpdated": "2025-06-22T11:48:00.276Z"
   },
   {
     "id": 5,
     "productId": 5,
-    "quantity": 2,
-    "lastUpdated": "2025-06-21T20:14:53.394Z",
-    "stock": 0
+    "quantity": 87,
+    "stock": 87,
+    "lastUpdated": "2025-06-22T11:55:33.483Z"
   },
   {
     "id": 6,
     "productId": 6,
-    "quantity": 150,
-    "lastUpdated": "2025-06-21T16:11:23.232Z"
-  },
-  {
-    "id": 7,
-    "productId": 7,
-    "quantity": 80,
-    "lastUpdated": "2025-06-21T16:11:23.232Z"
+    "quantity": 5,
+    "stock": 5,
+    "lastUpdated": "2025-06-22T11:55:08.637Z"
   }
 ]

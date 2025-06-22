@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "id": 1,
+    "name": "Fresh Buffalo Milk",
+    "price": 33.00,
+    "description": "Pure and creamy buffalo milk, rich in nutrients and perfect for your daily dairy needs",
+    "image": "/images/buffalo-milk.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Traditional Curd",
+    "price": 25.00,
+    "description": "Homemade style curd with perfect consistency and probiotic benefits",
+    "image": "/images/curd.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Natural Yogurt",
+    "price": 30.00,
+    "description": "Smooth and creamy yogurt made from fresh milk, perfect for a healthy breakfast",
+    "image": "/images/yogurt.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Farm Fresh Eggs",
+    "price": 22.00,
+    "description": "Fresh eggs from our farm, packed with protein and essential nutrients",
+    "image": "/images/eggs.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Desi Eggs",
+    "price": 45.00,
+    "description": "Premium quality desi eggs from free-range country chickens",
+    "image": "/images/desi-eggs.jpg"
+  }
+]

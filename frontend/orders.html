@@ -478,6 +478,37 @@
         </div>
     </div>
 
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Shopping Cart</h3>
+                <button onclick="closeCartModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-4">
+                <!-- Cart items will be populated here -->
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-semibold">Total:</span>
+                    <span class="text-xl font-bold">₹<span id="cart-total">0.00</span></span>
+                </div>
+                <div class="mb-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="use-wallet" class="form-checkbox">
+                        <span>Pay using wallet balance</span>
+                    </label>
+                    <div id="wallet-balance-display" class="text-sm text-gray-600 mt-1"></div>
+                </div>
+                <button onclick="submitOrder()" class="btn btn-primary w-full">Place Order</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentUser = null;
         let userOrders = [];
@@ -707,8 +738,8 @@
 
         function logout() {
             localStorage.removeItem('user');
-            checkAuth();
-            setupCustomerUI();
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
         }
 
         // Monthly Billing Functions for Customers
@@ -749,7 +780,10 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button onclick="downloadCustomerMonthlyBillPDF(${bill.id})" class="text-blue-600 hover:text-blue-900 mr-2">Download PDF</button>
-                        <button onclick="viewCustomerPaymentHistory(${bill.id})" class="text-green-600 hover:text-green-900">Payment History</button>
+                        <button onclick="viewCustomerPaymentHistory(${bill.id})" class="text-green-600 hover:text-green-900 mr-2">Payment History</button>
+                        ${bill.status !== 'paid' ? `
+                            <button onclick="showPaymentOptions(${bill.id}, ${bill.dueAmount}, '${bill.customerName}')" class="text-purple-600 hover:text-purple-900">Pay Now</button>
+                        ` : ''}
                     </td>
                 </tr>
             `).join('');
@@ -902,6 +936,137 @@
                     refreshButton.innerHTML = originalContent;
                     refreshButton.disabled = false;
                 }, 2000);
+            }
+        }
+
+        async function showPaymentOptions(billId, amount, customerName) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                    <h3 class="text-lg font-semibold mb-4">Choose Payment Method</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer" onclick="initiatePhonePePayment(${billId}, ${amount}, '${customerName}')">
+                            <div class="flex items-center">
+                                <img src="images/phonepe-logo.svg" alt="PhonePe" class="w-8 h-8 mr-3">
+                                <div>
+                                    <h4 class="font-medium">Pay with PhonePe</h4>
+                                    <p class="text-sm text-gray-500">UPI payments made easy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer" onclick="initiateGooglePayPayment(${billId}, ${amount})">
+                            <div class="flex items-center">
+                                <img src="images/googlepay-logo.svg" alt="Google Pay" class="w-8 h-8 mr-3">
+                                <div>
+                                    <h4 class="font-medium">Pay with Google Pay</h4>
+                                    <p class="text-sm text-gray-500">Fast and secure payments</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="this.closest('.fixed').remove()" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        async function initiatePhonePePayment(billId, amount, customerName) {
+            try {
+                const response = await fetch('/api/payments/phonepe/initiate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        billId,
+                        amount,
+                        customerName
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.redirectUrl) {
+                    window.location.href = result.redirectUrl;
+                } else {
+                    throw new Error(result.error || 'Failed to initiate payment');
+                }
+            } catch (error) {
+                console.error('Error initiating PhonePe payment:', error);
+                alert('Failed to initiate payment: ' + error.message);
+            }
+        }
+
+        async function initiateGooglePayPayment(billId, amount) {
+            try {
+                // Load Google Pay API
+                const script = document.createElement('script');
+                script.src = 'https://pay.google.com/gp/p/js/pay.js';
+                document.head.appendChild(script);
+
+                await new Promise(resolve => script.onload = resolve);
+
+                const paymentDataRequest = {
+                    apiVersion: 2,
+                    apiVersionMinor: 0,
+                    allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['AMEX', 'DISCOVER', 'MASTERCARD', 'VISA']
+                        },
+                        tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                                gateway: 'example',
+                                gatewayMerchantId: 'exampleGatewayMerchantId'
+                            }
+                        }
+                    }],
+                    merchantInfo: {
+                        merchantId: '12345678901234567890',
+                        merchantName: 'Vibha Agro Dairy'
+                    },
+                    transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPrice: amount.toString(),
+                        currencyCode: 'INR',
+                        countryCode: 'IN'
+                    }
+                };
+
+                const paymentsClient = new google.payments.api.PaymentsClient({
+                    environment: 'TEST'
+                });
+
+                const paymentData = await paymentsClient.loadPaymentData(paymentDataRequest);
+
+                // Process the payment
+                const response = await fetch('/api/payments/googlepay/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        paymentToken: paymentData.paymentMethodData.tokenizationData.token,
+                        amount,
+                        billId
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    window.location.href = '/payment-success.html';
+                } else {
+                    throw new Error(result.error || 'Failed to process payment');
+                }
+            } catch (error) {
+                console.error('Error processing Google Pay payment:', error);
+                alert('Failed to process payment: ' + error.message);
             }
         }
     </script>

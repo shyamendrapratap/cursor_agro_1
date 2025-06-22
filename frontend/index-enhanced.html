@@ -696,16 +696,102 @@
         </div>
     </footer>
 
+    <!-- Wallet Modal -->
+    <div id="wallet-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">My Wallet</h3>
+                <button onclick="closeWalletModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4">
+                <div class="text-2xl font-bold mb-2">Balance: ₹<span id="wallet-balance">0.00</span></div>
+                <button onclick="showAddMoneyForm()" class="btn btn-primary btn-sm">Add Money</button>
+            </div>
+            <div id="add-money-form" class="hidden mb-4">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Amount (₹)</label>
+                    <input type="number" id="add-money-amount" min="1" step="0.01" class="form-input w-full" required>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Payment Method</label>
+                    <select id="add-money-payment-method" class="form-select w-full" required>
+                        <option value="phonepe">PhonePe</option>
+                        <option value="googlepay">Google Pay</option>
+                    </select>
+                </div>
+                <button onclick="addMoneyToWallet()" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            <div class="mt-4">
+                <h4 class="font-semibold mb-2">Recent Transactions</h4>
+                <div id="wallet-transactions" class="space-y-2 max-h-48 overflow-y-auto">
+                    <!-- Transactions will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentUser = null;
         let productsData = [];
         let cart = [];
+        let productRefreshInterval;
         
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             setupCustomerInterface();
             initializeCart();
+            
+            // Start periodic refresh of products
+            productRefreshInterval = setInterval(loadProducts, 30000); // Refresh every 30 seconds
+            
+            // Clear interval when page is hidden
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    clearInterval(productRefreshInterval);
+                } else {
+                    loadProducts();
+                    productRefreshInterval = setInterval(loadProducts, 30000);
+                }
+            });
+            
+            // Cleanup when leaving page
+            window.addEventListener('beforeunload', () => {
+                clearInterval(productRefreshInterval);
+            });
         });
+
+        // Helper function for authenticated API requests
+        async function authenticatedFetch(url, options = {}) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            const response = await fetch(url, {
+                ...options,
+                headers
+            });
+
+            if (response.status === 401) {
+                // Token is invalid or expired
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+                throw new Error('Authentication failed');
+            }
+
+            return response;
+        }
 
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('user'));
@@ -722,6 +808,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
                         My Orders
+                    </button>
+                    <button onclick="showWalletModal()" class="btn btn-outline btn-sm">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        Wallet
                     </button>
                     <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
                     ${user.role === 'admin' ? '<button onclick="window.location.href=\'admin.html\'" class="btn btn-secondary btn-sm">Admin Panel</button>' : ''}
@@ -1049,41 +1141,8 @@
         
         function logout() {
             localStorage.removeItem('user');
-            cart = []; // Clear cart on logout
-            
-            // Restore original interface for logged-out users
-            const sectionsToShow = [
-                'hero-banner',
-                'features-section', 
-                'farm-showcase',
-                'testimonials-section',
-                'newsletter-section',
-                'map-section'
-            ];
-            
-            sectionsToShow.forEach(sectionId => {
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    section.style.display = 'block';
-                }
-            });
-            
-            // Show navbar links again
-            const navbarLinks = document.querySelectorAll('nav a[href^="#"]');
-            navbarLinks.forEach(link => {
-                link.style.display = 'inline-block';
-            });
-            
-            // Remove customer welcome section if it exists
-            const welcomeSection = document.querySelector('.text-center.mb-8.bg-blue-50');
-            if (welcomeSection && welcomeSection.querySelector('h1') && welcomeSection.querySelector('h1').textContent.includes('Welcome back')) {
-                welcomeSection.remove();
-            }
-            
-            // Restore original page title
-            document.title = 'Vibha Agro Dairy - Fresh Dairy Products';
-            
-            checkAuth(); // This will refresh the products and hide cart functionality
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
         }
 
         // Newsletter subscription function
@@ -1180,6 +1239,90 @@
             }
             // If authenticated, proceed to shop
             window.location.href = '/bills.html';
+        }
+
+        async function showWalletModal() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                // Fetch wallet balance
+                const balanceResponse = await authenticatedFetch('/api/wallet/balance');
+                const balanceData = await balanceResponse.json();
+                document.getElementById('wallet-balance').textContent = balanceData.balance.toFixed(2);
+
+                // Fetch transactions
+                const transactionsResponse = await authenticatedFetch('/api/wallet/transactions');
+                const transactionsData = await transactionsResponse.json();
+                
+                const transactionsHtml = transactionsData.transactions.map(t => `
+                    <div class="p-2 bg-gray-50 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="${t.type === 'CREDIT' ? 'text-green-600' : 'text-red-600'}">
+                                ${t.type === 'CREDIT' ? '+' : '-'}₹${t.amount.toFixed(2)}
+                            </span>
+                            <span class="text-sm text-gray-500">${new Date(t.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            ${t.type === 'CREDIT' ? `Via ${t.paymentMethod}` : `Order #${t.orderId}`}
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('wallet-transactions').innerHTML = transactionsHtml || '<p class="text-gray-500">No transactions yet</p>';
+                document.getElementById('wallet-modal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading wallet:', error);
+                alert('Failed to load wallet information. Please try again.');
+            }
+        }
+
+        function closeWalletModal() {
+            document.getElementById('wallet-modal').classList.add('hidden');
+            document.getElementById('add-money-form').classList.add('hidden');
+        }
+
+        function showAddMoneyForm() {
+            document.getElementById('add-money-form').classList.remove('hidden');
+        }
+
+        async function addMoneyToWallet() {
+            const amount = parseFloat(document.getElementById('add-money-amount').value);
+            const paymentMethod = document.getElementById('add-money-payment-method').value;
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            try {
+                // For demo purposes, we'll simulate a successful payment
+                const transactionId = `DEMO_${Date.now()}`;
+
+                const response = await authenticatedFetch('/api/wallet/add', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        amount,
+                        paymentMethod,
+                        transactionId
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Money added successfully!');
+                    document.getElementById('add-money-form').classList.add('hidden');
+                    document.getElementById('add-money-amount').value = '';
+                    showWalletModal(); // Refresh wallet info
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to add money');
+                }
+            } catch (error) {
+                console.error('Error adding money:', error);
+                alert('Failed to add money. Please try again.');
+            }
         }
     </script>
 </body>
