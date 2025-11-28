@@ -4,7 +4,7 @@
     "productId": 1,
     "quantity": 100,
     "stock": 100,
-    "lastUpdated": "2025-06-22T11:44:01.234Z"
+    "lastUpdated": "2025-11-28T21:30:28.709Z"
   },
   {
     "id": 2,
@@ -33,12 +33,5 @@
     "quantity": 87,
     "stock": 87,
     "lastUpdated": "2025-06-22T11:55:33.483Z"
-  },
-  {
-    "id": 6,
-    "productId": 6,
-    "quantity": 5,
-    "stock": 5,
-    "lastUpdated": "2025-06-22T11:55:08.637Z"
   }
 ]

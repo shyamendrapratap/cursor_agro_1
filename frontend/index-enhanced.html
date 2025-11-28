@@ -756,7 +756,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             setupCustomerInterface();
+            
+            // Load cart from localStorage
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
             initializeCart();
+            updateCartDisplay();
             
             // Start periodic refresh of products
             productRefreshInterval = setInterval(loadProducts, 30000); // Refresh every 30 seconds
@@ -808,12 +813,20 @@
 
         function checkAuth() {
             const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
             currentUser = user;
+            
+            // If user exists but no token, they need to re-login
+            if (user && !token) {
+                console.warn('User session found but no token. Please re-login.');
+                localStorage.removeItem('user');
+                currentUser = null;
+            }
             
             const userSection = document.getElementById('user-section');
             const cartButton = document.getElementById('open-cart-btn');
             
-            if (user) {
+            if (currentUser && token) {
                 userSection.innerHTML = `
                     <span class="text-gray-700">Welcome, ${user.username}</span>
                     ${user.role === 'customer' ? `
@@ -991,6 +1004,31 @@
             });
         }
 
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            notification.textContent = message;
+            notification.style.transform = 'translateX(400px)';
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         function initializeCart() {
             const productGrid = document.getElementById("product-grid");
             const cartCount = document.getElementById("cart-count");
@@ -1029,11 +1067,13 @@
                 if (e.target.classList.contains("delete-btn")) {
                     const index = parseInt(e.target.dataset.index);
                     cart.splice(index, 1);
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     updateCartDisplay();
                 }
                 if (e.target.classList.contains("increase-btn")) {
                     const index = parseInt(e.target.dataset.index);
                     cart[index].quantity++;
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     updateCartDisplay();
                 }
                 if (e.target.classList.contains("decrease-btn")) {
@@ -1043,6 +1083,7 @@
                     } else {
                         cart.splice(index, 1);
                     }
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     updateCartDisplay();
                 }
             });
@@ -1054,25 +1095,39 @@
                 console.error('Product not found:', productId);
                 return;
             }
+            
+            // Load cart from localStorage
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
             const existingItem = cart.find(item => item.id === productId);
             if (existingItem) {
                 existingItem.quantity++;
             } else {
                 cart.push({ ...productToAdd, quantity: 1 });
             }
+            
+            // Save cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
             updateCartDisplay();
+            
+            // Show success feedback
+            showNotification('Product added to cart!', 'success');
         }
 
         function updateCartDisplay() {
             const cartItemsContainer = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
             const cartCount = document.getElementById('cart-count');
+            const orderNowBtn = document.getElementById('order-now-btn');
             
             if (!cartItemsContainer || !cartTotal || !cartCount) return;
             
-            // Get cart items from localStorage
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cartCount.textContent = cart.length;
+            // Get cart items from localStorage and sync with global cart variable
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Calculate total items count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
             
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = `
@@ -1082,27 +1137,31 @@
                     </div>
                 `;
                 cartTotal.textContent = '0.00';
+                // Hide order button when cart is empty
+                if (orderNowBtn) orderNowBtn.style.display = 'none';
                 return;
             }
             
             // Calculate total and display items
             let total = 0;
-            cartItemsContainer.innerHTML = cart.map(item => {
-                const product = productsData.find(p => p.id === item.productId);
-                if (!product) return '';
-                total += product.price * item.quantity;
+            cartItemsContainer.innerHTML = cart.map((item, index) => {
+                // Cart items have the full product data stored
+                total += item.price * item.quantity;
                 return `
                     <div class="flex items-center justify-between p-4 border-b">
                         <div class="flex items-center">
-                            <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-lg">
+                            <img src="${item.image || '/images/cattle1.jpg'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
                             <div class="ml-4">
-                                <h4 class="font-medium">${product.name}</h4>
-                                <p class="text-gray-600">₹${product.price.toFixed(2)} × ${item.quantity}</p>
+                                <h4 class="font-medium">${item.name}</h4>
+                                <p class="text-gray-600">₹${item.price.toFixed(2)} × ${item.quantity}</p>
                             </div>
                         </div>
-                        <div class="flex items-center">
-                            <span class="font-medium mr-4">₹${(product.price * item.quantity).toFixed(2)}</span>
-                            <button onclick="removeFromCart(${product.id})" class="text-red-500 hover:text-red-700">
+                        <div class="flex items-center space-x-2">
+                            <button class="decrease-btn px-2 py-1 bg-gray-200 rounded hover:bg-gray-300" data-index="${index}">-</button>
+                            <span class="font-medium px-2">${item.quantity}</span>
+                            <button class="increase-btn px-2 py-1 bg-gray-200 rounded hover:bg-gray-300" data-index="${index}">+</button>
+                            <span class="font-medium ml-4">₹${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="delete-btn text-red-500 hover:text-red-700 ml-2" data-index="${index}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
@@ -1113,11 +1172,16 @@
             }).join('');
             
             cartTotal.textContent = total.toFixed(2);
+            
+            // Show order button when cart has items
+            if (orderNowBtn) orderNowBtn.style.display = 'block';
         }
 
         async function submitOrder() {
             const user = JSON.parse(localStorage.getItem('user'));
-            if (!user) {
+            const token = localStorage.getItem('token');
+            
+            if (!user || !token) {
                 alert('Please login to place an order');
                 window.location.href = 'login.html';
                 return;
@@ -1136,6 +1200,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(orderData)
                 });
@@ -1145,15 +1210,18 @@
                     window.lastOrderId = order.id;
                     alert(`Order #${order.id} placed successfully!\nStatus: ${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}\nWe'll contact you soon for delivery details.`);
                     cart = [];
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     updateCartDisplay();
                     const cartModal = document.getElementById("cart-modal");
                     cartModal.classList.add("hidden");
                 } else {
-                    alert('Failed to place order. Please try again.');
+                    const errorData = await response.json();
+                    console.error('Order error:', errorData);
+                    alert(`Failed to place order: ${errorData.error || 'Please try again.'}`);
                 }
             } catch (error) {
                 console.error('Error submitting order:', error);
-                alert('Error placing order. Please try again.');
+                alert('Error placing order. Please check your connection and try again.');
             }
         }
         

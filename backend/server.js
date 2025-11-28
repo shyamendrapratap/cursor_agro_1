@@ -79,6 +79,14 @@ function loadInitialData() {
         saveProducts();
     }
 
+    // Clean up orphaned inventory items (items without corresponding products)
+    const initialInventoryCount = inventory.length;
+    inventory = inventory.filter(item => products.find(p => p.id === item.productId));
+    if (inventory.length < initialInventoryCount) {
+        console.log(`Cleaned up ${initialInventoryCount - inventory.length} orphaned inventory items`);
+        saveInventory();
+    }
+
     // Load or create orders data
     if (fs.existsSync(ORDERS_FILE)) {
         orders = JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8'));
@@ -247,6 +255,43 @@ app.get("/api/products", (req, res) => {
 
 // Inventory endpoints
 app.get("/api/inventory", (req, res) => {
+    // Reload inventory from file each time to ensure data consistency
+    let inventory = [];
+    if (fs.existsSync(INVENTORY_FILE)) {
+        try {
+            inventory = JSON.parse(fs.readFileSync(INVENTORY_FILE, 'utf8'));
+        } catch (error) {
+            console.error('Error reading inventory file:', error);
+            return res.status(500).json({ error: "Failed to read inventory data" });
+        }
+    }
+    
+    // Load products to filter out orphaned inventory items
+    const productsFile = path.join(dataDir, 'products.json');
+    let products = [];
+    if (fs.existsSync(productsFile)) {
+        try {
+            products = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
+        } catch (error) {
+            console.error('Error reading products file:', error);
+            return res.status(500).json({ error: "Failed to read products data" });
+        }
+    }
+    
+    // Filter out orphaned inventory items and clean up if needed
+    const initialCount = inventory.length;
+    inventory = inventory.filter(item => products.find(p => p.id === item.productId));
+    
+    // If orphaned items were found, save the cleaned inventory
+    if (inventory.length < initialCount) {
+        console.log(`Cleaned up ${initialCount - inventory.length} orphaned inventory items`);
+        try {
+            fs.writeFileSync(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
+        } catch (error) {
+            console.error('Error saving cleaned inventory:', error);
+        }
+    }
+    
     res.json(inventory);
 });
 
@@ -258,9 +303,32 @@ app.post("/api/inventory", (req, res) => {
         return res.status(400).json({ error: "Name, price, and stock are required" });
     }
     
+    // Reload products and inventory from files to ensure we have latest data
+    const productsFile = path.join(dataDir, 'products.json');
+    let products = [];
+    if (fs.existsSync(productsFile)) {
+        try {
+            products = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
+        } catch (error) {
+            console.error('Error reading products file:', error);
+            return res.status(500).json({ error: "Failed to read products data" });
+        }
+    }
+    
+    let inventory = [];
+    if (fs.existsSync(INVENTORY_FILE)) {
+        try {
+            inventory = JSON.parse(fs.readFileSync(INVENTORY_FILE, 'utf8'));
+        } catch (error) {
+            console.error('Error reading inventory file:', error);
+            return res.status(500).json({ error: "Failed to read inventory data" });
+        }
+    }
+    
     // Create new product
+    const newProductId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
     const newProduct = {
-        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+        id: newProductId,
         name: name.trim(),
         price: parseFloat(price),
         description: description || "",
@@ -269,11 +337,12 @@ app.post("/api/inventory", (req, res) => {
     
     // Add to products array
     products.push(newProduct);
-    saveProducts();
+    fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
     
     // Create inventory entry
+    const newInventoryId = inventory.length > 0 ? Math.max(...inventory.map(item => item.id)) + 1 : 1;
     const newInventoryItem = {
-        id: inventory.length > 0 ? Math.max(...inventory.map(item => item.id)) + 1 : 1,
+        id: newInventoryId,
         productId: newProduct.id,
         quantity: parseInt(stock),
         stock: parseInt(stock),
@@ -282,7 +351,7 @@ app.post("/api/inventory", (req, res) => {
     
     // Add to inventory
     inventory.push(newInventoryItem);
-    saveInventory();
+    fs.writeFileSync(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
     
     console.log(`New product added: ${newProduct.name} (ID: ${newProduct.id})`);
     res.json({ product: newProduct, inventory: newInventoryItem });
@@ -291,75 +360,117 @@ app.post("/api/inventory", (req, res) => {
 app.put("/api/inventory/:id", (req, res) => {
     const { id } = req.params;
     const { name, price, stock, description, image } = req.body;
+    
+    // Reload inventory and products from files
+    let inventory = [];
+    if (fs.existsSync(INVENTORY_FILE)) {
+        try {
+            inventory = JSON.parse(fs.readFileSync(INVENTORY_FILE, 'utf8'));
+        } catch (error) {
+            console.error('Error reading inventory file:', error);
+            return res.status(500).json({ error: "Failed to read inventory data" });
+        }
+    }
+    
+    const productsFile = path.join(dataDir, 'products.json');
+    let products = [];
+    if (fs.existsSync(productsFile)) {
+        try {
+            products = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
+        } catch (error) {
+            console.error('Error reading products file:', error);
+            return res.status(500).json({ error: "Failed to read products data" });
+        }
+    }
+    
     const item = inventory.find(item => item.id === parseInt(id));
     
-    if (item) {
-        // Find corresponding product
-        const product = products.find(p => p.id === item.productId);
-        
-        if (product) {
-            // Update product fields if provided
-            if (name !== undefined) product.name = name.trim();
-            if (price !== undefined) product.price = parseFloat(price);
-            if (description !== undefined) product.description = description;
-            if (image !== undefined) product.image = image;
-            
-            // Save updated products
-            saveProducts();
-        }
-        
-        // Update inventory fields if provided
-        if (stock !== undefined) {
-            item.quantity = parseInt(stock);
-            item.stock = parseInt(stock);
-        }
-        
-        item.lastUpdated = new Date().toISOString();
-        saveInventory();
-        
-        res.json({ product, inventory: item });
-    } else {
-        res.status(404).json({ error: "Inventory item not found" });
+    if (!item) {
+        return res.status(404).json({ error: "Inventory item not found" });
     }
+    
+    // Find corresponding product
+    const product = products.find(p => p.id === item.productId);
+    
+    if (!product) {
+        return res.status(404).json({ error: "Product not found for this inventory item" });
+    }
+    
+    // Update product fields if provided
+    if (name !== undefined) product.name = name.trim();
+    if (price !== undefined) product.price = parseFloat(price);
+    if (description !== undefined) product.description = description;
+    if (image !== undefined) product.image = image;
+    
+    // Save updated products
+    fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
+    
+    // Update inventory fields if provided
+    if (stock !== undefined) {
+        item.quantity = parseInt(stock);
+        item.stock = parseInt(stock);
+    }
+    
+    item.lastUpdated = new Date().toISOString();
+    fs.writeFileSync(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
+    
+    res.json({ product, inventory: item });
 });
 
 // Delete product from inventory
 app.delete("/api/inventory/:id", (req, res) => {
     const { id } = req.params;
+    
+    // Reload inventory from file
+    let inventory = [];
+    if (fs.existsSync(INVENTORY_FILE)) {
+        try {
+            inventory = JSON.parse(fs.readFileSync(INVENTORY_FILE, 'utf8'));
+        } catch (error) {
+            console.error('Error reading inventory file:', error);
+            return res.status(500).json({ error: "Failed to read inventory data" });
+        }
+    }
+    
     const itemIndex = inventory.findIndex(item => item.id === parseInt(id));
     
-    if (itemIndex !== -1) {
-        const deletedItem = inventory[itemIndex];
-        
-        // Load products data
-        let products = [];
-        const productsFile = path.join(dataDir, 'products.json');
-        if (fs.existsSync(productsFile)) {
-            products = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
-        }
-        
-        // Remove corresponding product
-        const productIndex = products.findIndex(p => p.id === deletedItem.productId);
-        let deletedProduct = null;
-        if (productIndex !== -1) {
-            deletedProduct = products[productIndex];
-            products.splice(productIndex, 1);
-            fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
-        }
-        
-        // Remove inventory item
-        inventory.splice(itemIndex, 1);
-        saveInventory(); // Save to file
-        
-        console.log(`Product deleted: ${deletedProduct ? deletedProduct.name : 'Unknown'} (ID: ${deletedItem.id})`);
-        res.json({ 
-            message: "Product deleted successfully", 
-            deletedProduct, 
-            deletedInventory: deletedItem 
-        });
-    } else {
-        res.status(404).json({ error: "Inventory item not found" });
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: "Inventory item not found" });
     }
+    
+    const deletedItem = inventory[itemIndex];
+    
+    // Load products data
+    const productsFile = path.join(dataDir, 'products.json');
+    let products = [];
+    if (fs.existsSync(productsFile)) {
+        try {
+            products = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
+        } catch (error) {
+            console.error('Error reading products file:', error);
+            return res.status(500).json({ error: "Failed to read products data" });
+        }
+    }
+    
+    // Remove corresponding product
+    const productIndex = products.findIndex(p => p.id === deletedItem.productId);
+    let deletedProduct = null;
+    if (productIndex !== -1) {
+        deletedProduct = products[productIndex];
+        products.splice(productIndex, 1);
+        fs.writeFileSync(productsFile, JSON.stringify(products, null, 2));
+    }
+    
+    // Remove inventory item
+    inventory.splice(itemIndex, 1);
+    fs.writeFileSync(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
+    
+    console.log(`Product deleted: ${deletedProduct ? deletedProduct.name : 'Unknown'} (ID: ${deletedItem.id})`);
+    res.json({ 
+        message: "Product deleted successfully", 
+        deletedProduct, 
+        deletedInventory: deletedItem 
+    });
 });
 
 // Orders endpoints

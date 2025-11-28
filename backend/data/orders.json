@@ -436,5 +436,65 @@
     "total": 6.99,
     "status": "pending",
     "createdAt": "2025-06-22T10:47:10.155Z"
+  },
+  {
+    "id": 22,
+    "customerName": "customer1",
+    "items": [
+      {
+        "id": 1,
+        "name": "Fresh Buffalo Milk",
+        "price": 90,
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "name": "Traditional Clay Pot Curd",
+        "price": 40,
+        "quantity": 1
+      }
+    ],
+    "total": 220,
+    "customerId": 2,
+    "status": "pending",
+    "paymentMethod": "pending",
+    "paymentStatus": "pending",
+    "createdAt": "2025-11-28T21:46:17.106Z"
+  },
+  {
+    "id": 23,
+    "customerName": "customer1",
+    "items": [
+      {
+        "id": 1,
+        "name": "Fresh Buffalo Milk",
+        "price": 90,
+        "description": "Pure and creamy buffalo milk, rich in nutrients and perfect for your daily dairy needs",
+        "image": "/images/buffalo-milk.jpg",
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "name": "Traditional Clay Pot Curd",
+        "price": 40,
+        "description": "Authentic Indian curd set in clay pot, made fresh daily with natural fermentation process",
+        "image": "/images/curd.jpg",
+        "quantity": 1
+      },
+      {
+        "id": 4,
+        "name": "Farm Fresh Eggs",
+        "price": 90,
+        "description": "Fresh eggs from our farm, packed with protein and essential nutrients",
+        "image": "/images/eggs.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 310,
+    "customerId": 2,
+    "status": "pending",
+    "paymentMethod": "pending",
+    "paymentStatus": "pending",
+    "createdAt": "2025-11-28T21:47:59.930Z"
   }
 ]
